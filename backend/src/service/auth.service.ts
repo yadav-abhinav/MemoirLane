@@ -14,7 +14,7 @@ import {
 export async function createNewUser(req: Request, res: Response) {
   try {
     const userInfo = CreateUserDto.check(req.body);
-    const saltRounds = parseInt(process.env["SALT_ROUNDS"] ?? "10");
+    const saltRounds = parseInt(process.env["SALT_ROUNDS"]!) ?? 10;
     const passwordHash = await bcrypt.hash(userInfo.password, saltRounds);
     const newUser = await User.create({
       id: uuidv4(),
@@ -53,8 +53,7 @@ export async function loginUser(req: Request, res: Response) {
       constructErrorResponse(res, "User not found!", HttpStatus.NOT_FOUND);
     }
 
-    const passwordHash = user?.password as string;
-    const match = await bcrypt.compare(credentials.password, passwordHash);
+    const match = await bcrypt.compare(credentials.password, user!.password);
 
     if (!match) {
       constructErrorResponse(
@@ -65,7 +64,7 @@ export async function loginUser(req: Request, res: Response) {
     } else {
       const secretKey = process.env["JWT_SECRET_KEY"] as string;
       const token = jwt.sign(
-        { userId: user?.id, email: user?.email },
+        { userId: user!.id, email: user!.email },
         secretKey,
         {
           expiresIn: "2 days",

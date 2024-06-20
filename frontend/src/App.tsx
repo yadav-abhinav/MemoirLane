@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignUp from "./components/signupForm";
+import Navbar from "./components/navbar";
+import Landing from "./pages/landingPage";
+import { PaletteMode, ThemeProvider, createTheme } from "@mui/material";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [theme, setTheme] = useState<PaletteMode>("light");
+  const defaultTheme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#11999E",
+      },
+    }
+  });
+
+  const t = createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#52D3D8"
+      }
+    },
+  });
+
+  defaultTheme.typography.h1 = t.typography.h1 = {
+    fontSize: "2.5rem",
+    [defaultTheme.breakpoints.up("sm")]: {
+      fontSize: "3rem",
+    },
+    [defaultTheme.breakpoints.up("md")]: {
+      fontSize: "4rem",
+    },
+    [defaultTheme.breakpoints.up("lg")]: {
+      fontSize: "5.9rem",
+    },
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <ThemeProvider theme={theme == "light" ? defaultTheme : t}>
+          <Navbar mode={theme} toggleColorMode={toggleTheme} />
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
