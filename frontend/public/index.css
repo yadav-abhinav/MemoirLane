@@ -7,3 +7,15 @@ body {
   /* text-align: center; */
   /* background: linear-gradient(90deg, rgba(48, 227, 202, 0.2), #fff 50%); */
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px unset inset !important;
+}

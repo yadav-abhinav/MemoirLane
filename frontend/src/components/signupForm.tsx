@@ -1,123 +1,201 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import {
+  Avatar,
+  Button,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+  Stack,
+  useTheme,
+} from "@mui/material";
+import {
+  LockOutlined,
+  Facebook,
+  Google,
+  GitHub,
+  VisibilityOff,
+  Visibility,
+} from "@mui/icons-material";
 
 export default function SignUp() {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const theme = useTheme();
+  const bgColor =
+    theme.palette.mode === "light"
+      ? "rgba(17, 153, 158, 0.3)"
+      : "rgba(38, 80, 115, 0.3)";
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    console.log(data.get("rememberMe"));
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
+
+  // const handleMouseDownPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
+      <Container
+        maxWidth={false}
         sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          // background: `radial-gradient(circle at 50%, ${bgColor}, transparent 150%)`,
+          background: `radial-gradient(circle at 50%, transparent, ${bgColor} 80%)`,
+          minHeight: "100vh",
+          pb: "1rem",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{
+            paddingTop: {
+              xs: "6rem",
+              md: "10rem",
+            },
+            background: "radial-gradient",
+          }}
+          disableGutters
+        >
+          <Paper
+            elevation={12}
+            sx={{
+              p: "2rem 3rem",
+              borderRadius: "14px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
+            <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+              <LockOutlined />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign Up
+            </Typography>
+            <Box
+              component="form"
+              // noValidate
+              onSubmit={handleSubmit}
+              sx={{ my: 3 }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="family-name"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth required>
+                    <InputLabel>Create a password</InputLabel>
+                    <OutlinedInput
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            // onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Create a password"
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <FormControlLabel
+                control={<Checkbox name="rememberMe" defaultChecked />}
+                label="Remember me"
+                sx={{ mt: 1.5 }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                size="large"
+                variant="contained"
+                sx={{ mt: 1.5, mb: 2 }}
+              >
+                Sign Up
+              </Button>
+            </Box>
+            <Divider flexItem>OR</Divider>
+
+            <Stack direction="row" spacing={5} mt={2}>
+              <IconButton sx={{ border: "2px solid red" }}>
+                <Google color="error" />
+              </IconButton>
+              <IconButton
+                sx={{ border: "2px solid #1877F2", color: "#1877F2" }}
+              >
+                <Facebook />
+              </IconButton>
+              <IconButton
+                sx={{
+                  border: `2px solid ${
+                    theme.palette.mode === "light" ? "#707070" : "white"
+                  }`,
+                }}
+              >
+                <GitHub />
+              </IconButton>
+            </Stack>
+
+            <Typography variant="body2" sx={{ mt: "1.5rem" }}>
+              Already have an account?
+              <Link href="\login" variant="body2" sx={{ ml: "0.5rem" }}>
+                Login
               </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-      <Copyright sx={{ mt: 5 }} />
-    </Container>
+            </Typography>
+          </Paper>
+        </Container>
+      </Container>
   );
 }

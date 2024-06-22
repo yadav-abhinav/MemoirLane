@@ -29,7 +29,8 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    console.log(event)
     setAnchorElNav(null);
   };
 
@@ -71,7 +72,7 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
           <Box
             sx={{ display: { md: "flex", xs: "none" }, alignItems: "center" }}
           >
-            <IconButton href="#">
+            <IconButton href="/">
               <img
                 src={theme.palette.mode === "light" ? logo_black : logo_white}
                 style={{ height: "35px" }}
@@ -136,6 +137,8 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
               ))}
               <MenuItem
                 onClick={handleCloseNavMenu}
+                href="https://github.com/yadav-abhinav/MemoirLane"
+                target="_blank"
                 sx={{ color: theme.palette.text.secondary }}
               >
                 Github
@@ -150,8 +153,8 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
                     flexDirection: "column",
                   }}
                 >
-                  <Button sx={{ borderRadius: "14px" }}>Sign Up</Button>
-                  <Button variant="contained" sx={{ borderRadius: "14px" }}>
+                  <Button href="/signup" sx={{ borderRadius: "14px" }}>Sign Up</Button>
+                  <Button href="/login" variant="contained" sx={{ borderRadius: "14px" }}>
                     Sign In
                   </Button>
                 </Box>
@@ -163,7 +166,7 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
           <Box
             sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}
           >
-            <IconButton href="#">
+            <IconButton href="/">
               <img
                 src={theme.palette.mode === "light" ? logo_black : logo_white}
                 style={{ height: "35px" }}
@@ -217,6 +220,8 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
                 color: theme.palette.text.secondary,
                 display: "block",
               }}
+              href="https://github.com/yadav-abhinav/MemoirLane"
+              target="_blank"
             >
               Github
             </Button>
@@ -236,6 +241,7 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
               Sign Up
             </Button>
             <Button
+              href="/login"
               variant="contained"
               sx={{ borderRadius: "14px", ml: "0.5rem" }}
             >

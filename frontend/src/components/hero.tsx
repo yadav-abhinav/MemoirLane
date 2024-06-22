@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  CssBaseline,
   Grid,
   Typography,
   useTheme,
@@ -19,7 +18,6 @@ function Hero() {
   return (
     <>
       {/* Hero - MEDIUM */}
-      <CssBaseline />
       <Grid
         container
         alignItems="center"
