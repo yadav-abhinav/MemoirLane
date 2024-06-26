@@ -28,26 +28,55 @@ import {
   VisibilityOff,
   Visibility,
 } from "@mui/icons-material";
+import axios, { AxiosError } from "axios";
+import { Bounce, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../util/context";
 
 export default function Login() {
+  const { setLoggedIn } = React.useContext(AuthContext);
   const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
   const theme = useTheme();
   const bgColor =
     theme.palette.mode === "light"
       ? "rgba(17, 153, 158, 0.3)"
       : "rgba(38, 80, 115, 0.3)";
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const url = import.meta.env["VITE_BACKEND_ENDPOINT"];
+    const endpoint = url + "/login";
     const data = new FormData(event.currentTarget);
-    data.forEach((val, key) => {
-      console.log(key + " : " + val);
-    });
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-      z: data.get("rememberMe"),
-    });
+    console.log(endpoint);
+    try {
+      const res = await axios.post(endpoint, {
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      res.headers["set-cookie"]
+      console.log(data.get("rememberMe"));
+      toast.success("User registered successfully! Redirecting to Login...", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: theme.palette.mode,
+        transition: Bounce,
+      });
+      setLoggedIn(true);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 5000);
+    } catch (err) {
+      console.log(err);
+      let msg = null;
+      if (err instanceof AxiosError) msg = err.response?.data?.error;
+      toast.error(msg ?? "An error occured!", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: theme.palette.mode,
+        transition: Bounce,
+      });
+    }
   };
 
   const handleClickShowPassword = () => {

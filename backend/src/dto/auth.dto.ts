@@ -1,13 +1,12 @@
-import { Boolean, Number, String, Literal, Array, Tuple, Record, Union } from 'runtypes';
+import z from "zod";
 
+export const CreateUserDto = z.object({
+  email: z.string({ message: "Email is required" }).email(),
+  name: z.string(),
+  password: z.string().min(8),
+});
 
-export const CreateUserDto = Record({
-    email: String,
-    name: String,
-    password: String.withConstraint(s => s.length >= 8)
-})
-
-export const LoginDto = Record({
-    email: String,
-    password: String.withConstraint(s => s.length >= 8)
-})
+export const LoginDto = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});

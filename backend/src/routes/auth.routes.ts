@@ -1,9 +1,14 @@
 import express from "express";
-import { createNewUser, loginUser } from "../service/auth.service";
+import {
+  createNewUser,
+  loginUser,
+  refreshAccessToken,
+} from "../service/auth.service";
 
 const router = express.Router();
 
-router.get("/register", createNewUser);
-router.get("/login", loginUser);
+router.post("/register", createNewUser);
+router.post("/login", loginUser);
+router.get("/refresh", refreshAccessToken);
 
 export default router;
