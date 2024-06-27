@@ -9,13 +9,14 @@ import cors from "cors";
 import logger from "./utils/logger";
 import requestLogger from "./middleware/logger";
 import cookieParser from "cookie-parser";
+import errorHandler from "./middleware/errHandler";
 
 await connect();
 const port = process.env.PORT ?? 8080;
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(cors({ credentials: true }));
 app.use(requestLogger);
 app.use(authRoutes);
@@ -25,6 +26,7 @@ app.get("/", verifyJWT, (req, res) => {
   res.send(`Hello ${email}`);
 });
 
+app.use(errorHandler);
 app.listen(port, () => {
   logger.info(`Server started at http://localhost:${port}`);
 });

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
+import ApiError from "../utils/apiError";
 import { constructErrorResponse } from "../utils/responseGenerator";
 
 export default function errorHandler(
@@ -8,8 +9,9 @@ export default function errorHandler(
   res: Response,
   next: NextFunction
 ) {
+  if (err instanceof ApiError) {
+    return constructErrorResponse(res, err.message, err.satusCode);
+  }
   logger.error(err);
-  logger.error(err.stack);
-  constructErrorResponse(res);
-  next();
+  return constructErrorResponse(res);
 }

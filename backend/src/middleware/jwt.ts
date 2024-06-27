@@ -1,24 +1,27 @@
 import { Request, Response, NextFunction } from "express";
 import HttpStatus from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { CustomJWTPayload, CustomRequest } from "../entity/auth.entity";
-import { constructErrorResponse } from "../utils/responseGenerator";
+import { CustomRequest } from "../entity/auth.entity";
+import { verifyRefreshToken } from "../utils/jwt";
+import ApiError from "../utils/apiError";
 
-export default function verifyJWT(
+export default async function verifyJWT(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
     const accessToken = req.header("Authorization")!.split(" ")[1];
-    const payload = jwt.verify(
-      accessToken,
-      process.env["ACCESS_TOKEN_SECRET_KEY"]!
-    ) as CustomJWTPayload;
-    (req as CustomRequest).userId = payload.userId;
-    (req as CustomRequest).email = payload.email;
+    jwt.verify(accessToken, process.env["ACCESS_TOKEN_SECRET_KEY"]!);
+    const refreshToken = req.cookies?.token;
+    const { userId, email } = await verifyRefreshToken(refreshToken);
+
+    (req as CustomRequest).userId = userId;
+    (req as CustomRequest).email = email;
     next();
   } catch (err) {
-    constructErrorResponse(res, "Invalid auth token!", HttpStatus.UNAUTHORIZED);
+    if (err instanceof jwt.TokenExpiredError)
+      next(new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorized"));
+    else next(err);
   }
 }

@@ -6,11 +6,9 @@ export default function requestLogger(
   res: Response,
   next: NextFunction
 ) {
-  const { method, url } = req;
-  const { statusCode } = res;
-  logger.verbose(`Recieving request: ${method} ${url}`);
-  res.on("finish", function () {
-    logger.verbose(`Response: ${statusCode}`);
+  logger.verbose(`Recieving request: ${req.method} ${req.url}`);
+  res.on("finish", function (this: Response) {
+    logger.verbose(`Response: ${this.statusCode} ${this.statusMessage}`);
   });
   next();
 }
