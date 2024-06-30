@@ -1,49 +1,23 @@
+import { Bounce, ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CssBaseline, useTheme } from "@mui/material";
 import SignUp from "./components/signupForm";
 import Navbar from "./components/navbar";
 import Landing from "./pages/landingPage";
-import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
-import { useEffect, useState } from "react";
 import Login from "./components/loginForm";
-import { lightTheme, darkTheme } from "./util/theme";
-import AuthRoute from "./components/authRoute";
-import PrivateRoute from "./components/privateRoute";
+import AuthRoute from "./components/router/authRoute";
+import PrivateRoute from "./components/router/privateRoute";
 import Dashboard from "./pages/dashboard";
-import { AuthContext } from "./util/context";
-
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()!.split(";").shift();
-}
+import { AuthProvider } from "./components/provider/authProvider";
 
 function App() {
-  const [mode, setMode] = useState<PaletteMode>(
-    (localStorage.getItem("mode") ?? "light") as PaletteMode
-  );
-
-  const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    const token = getCookie("token");
-    console.log(token);
-    console.log(document.cookie);
-  }, [isLoggedIn]);
-
-  const toggleTheme = (): void => {
-    setMode((prev) => {
-      const newMode = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("mode", newMode);
-      return newMode;
-    });
-  };
+  const theme = useTheme();
 
   return (
     <BrowserRouter>
-      <ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
-        <CssBaseline />
-        <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
-          <Navbar mode={mode} toggleColorMode={toggleTheme} />
+      <CssBaseline />
+        <AuthProvider>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route
@@ -56,8 +30,13 @@ function App() {
               element={<PrivateRoute element={<Dashboard />} />}
             />
           </Routes>
-        </AuthContext.Provider>
-      </ThemeProvider>
+        </AuthProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme={theme.palette.mode}
+        transition={Bounce}
+      />
     </BrowserRouter>
   );
 }

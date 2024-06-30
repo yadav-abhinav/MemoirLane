@@ -1,9 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import axios from "axios";
+import { CustomThemeProvider } from "./components/provider/themeProvider.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+axios.defaults.withCredentials = true;
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <CustomThemeProvider>
     <App />
-  </React.StrictMode>,
-)
+  </CustomThemeProvider>
+);

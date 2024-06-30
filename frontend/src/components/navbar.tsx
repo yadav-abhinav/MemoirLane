@@ -1,39 +1,25 @@
-import * as React from "react";
+import { useContext } from "react";
 import {
   AppBar,
-  Box,
   Toolbar,
   IconButton,
   Typography,
-  Menu,
   Container,
   Button,
-  MenuItem,
   Divider,
   useTheme,
+  Box,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import logo_black from "/logo-black.png";
 import logo_white from "/logo-white.png";
-import ToggleColorMode from "./toggleTheme";
-import { themeTogglerProps } from "../util/types";
+import ThemeToggler from "./toggleTheme";
+import { authContext } from "../util/context";
+import ProfileMenu from "./profileMenu";
+import { navPages } from "../util/constants";
+import NavMenu from "./navMenu";
 
-const pages = ["Home", "Features"];
-
-function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event)
-    setAnchorElNav(null);
-  };
-
+function Navbar() {
+  const { isLoggedIn } = useContext(authContext);
   const theme = useTheme();
 
   return (
@@ -52,7 +38,6 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            maxWidth: "lg",
             px: "1rem",
             borderRadius: "30px",
             bgcolor:
@@ -81,11 +66,12 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
             </IconButton>
             <Typography
               variant="h6"
+              fontSize="1.3rem"
               noWrap
               component="a"
               href="/"
               sx={{
-                mr: 2,
+                mr: "1.5rem",
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
@@ -97,70 +83,7 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
             </Typography>
           </Box>
 
-          {/* Menu - SMALL */}
-          <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ color: theme.palette.text.secondary }}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                href="https://github.com/yadav-abhinav/MemoirLane"
-                target="_blank"
-                sx={{ color: theme.palette.text.secondary }}
-              >
-                Github
-              </MenuItem>
-              <Divider variant="middle" />
-              <MenuItem disableRipple>
-                <Box
-                  sx={{
-                    mx: "0.5rem",
-                    mb: "0.5rem",
-                    display: { md: "none", xs: "flex" },
-                    flexDirection: "column",
-                  }}
-                >
-                  <Button href="/signup" sx={{ borderRadius: "14px" }}>Sign Up</Button>
-                  <Button href="/login" variant="contained" sx={{ borderRadius: "14px" }}>
-                    Sign In
-                  </Button>
-                </Box>
-              </MenuItem>
-            </Menu>
-          </Box>
+          <NavMenu />
 
           {/* Logo & Name - SMALL */}
           <Box
@@ -179,8 +102,7 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
               component="a"
               href="/"
               sx={{
-                mr: 2,
-                flexGrow: 1,
+                mr: 3,
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
@@ -194,60 +116,56 @@ function Navbar({ mode, toggleColorMode }: themeTogglerProps) {
 
           {/* Menu - MEDIUM */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: theme.palette.text.secondary,
-                  display: "block",
-                }}
-              >
-                {page}
-              </Button>
+            {navPages.map((page, id) => (
+              <>
+                {id === navPages.length - 1 && (
+                  <Divider
+                    key={id + 1}
+                    orientation="vertical"
+                    variant="middle"
+                    flexItem
+                    sx={{ mx: "0.5rem", my: "0.5rem" }}
+                  />
+                )}
+                <Button
+                  key={id}
+                  // onClick={handleCloseNavMenu}
+                  href={page.href}
+                  sx={{
+                    my: 1,
+                    color: theme.palette.text.secondary,
+                    display: "block",
+                  }}
+                >
+                  {page.title}
+                </Button>
+              </>
             ))}
-            <Divider
-              orientation="vertical"
-              variant="middle"
-              flexItem
-              sx={{ mx: "0.5rem", my: "1rem" }}
-            />
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: theme.palette.text.secondary,
-                display: "block",
-              }}
-              href="https://github.com/yadav-abhinav/MemoirLane"
-              target="_blank"
-            >
-              Github
-            </Button>
           </Box>
 
-          <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-
-          {/* Sign up/in - MEDIUM */}
-          <Box
-            sx={{
-              flexGrow: 0,
-              mx: "1rem",
-              display: { md: "flex", xs: "none" },
-            }}
-          >
-            <Button href="/signUp" sx={{ borderRadius: "14px" }}>
-              Sign Up
-            </Button>
-            <Button
-              href="/login"
-              variant="contained"
-              sx={{ borderRadius: "14px", ml: "0.5rem" }}
-            >
-              Sign In
-            </Button>
+          <Box display={{ md: "flex", xs: "none" }} alignItems="center">
+            <ThemeToggler />
+            {!isLoggedIn && (
+              <Box mx="1rem">
+                <Button href="/signUp" sx={{ borderRadius: "14px" }}>
+                  Sign Up
+                </Button>
+                <Button
+                  href="/login"
+                  variant="contained"
+                  sx={{ borderRadius: "14px", ml: "0.5rem" }}
+                >
+                  Sign In
+                </Button>
+              </Box>
+            )}
           </Box>
+
+          {isLoggedIn ? (
+            <ProfileMenu ml={{ xs: 0, md: "2rem" }} />
+          ) : (
+            <ThemeToggler sx={{ display: { md: "none", xs: "flex" } }} />
+          )}
         </Toolbar>
       </Container>
     </AppBar>

@@ -1,7 +1,13 @@
 import { createContext } from "react";
-import { authContext } from "./types";
+import { CustomJWTPayload, authContextType, themeContextType } from "./types";
 
-export const AuthContext = createContext<authContext>({
+export const authContext = createContext<authContextType>({
+  user: {} as CustomJWTPayload,
   isLoggedIn: false,
   setLoggedIn: () => {},
+});
+
+export const themeContext = createContext<themeContextType>({
+  mode: "light",
+  toggleColorMode: () => {},
 });

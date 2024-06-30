@@ -1,11 +1,9 @@
-import * as React from "react";
+import React, { useContext, useState } from "react";
 import {
   Avatar,
-  Button,
   TextField,
   Link,
   Grid,
-  Box,
   Typography,
   Container,
   Checkbox,
@@ -19,6 +17,7 @@ import {
   Paper,
   Stack,
   useTheme,
+  Box,
 } from "@mui/material";
 import {
   Login as LoginIcon,
@@ -28,14 +27,17 @@ import {
   VisibilityOff,
   Visibility,
 } from "@mui/icons-material";
-import axios, { AxiosError } from "axios";
-import { Bounce, toast } from "react-toastify";
+import axios, { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../util/context";
+import { authContext } from "../util/context";
+import { errorResponse, loginResponse } from "../util/types";
+import { LoadingButton } from "@mui/lab";
 
 export default function Login() {
-  const { setLoggedIn } = React.useContext(AuthContext);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const { setLoggedIn } = useContext(authContext);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const bgColor =
@@ -45,37 +47,35 @@ export default function Login() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const url = import.meta.env["VITE_BACKEND_ENDPOINT"];
-    const endpoint = url + "/login";
-    const data = new FormData(event.currentTarget);
-    console.log(endpoint);
+    setLoading(true);
+    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/login";
+    const fromData = new FormData(event.currentTarget);
     try {
-      const res = await axios.post(endpoint, {
-        email: data.get("email"),
-        password: data.get("password"),
+      const {
+        data: { success, payload },
+      } = await axios.post<loginResponse>(endpoint, {
+        email: fromData.get("email"),
+        password: fromData.get("password"),
       });
-      res.headers["set-cookie"]
-      console.log(data.get("rememberMe"));
-      toast.success("User registered successfully! Redirecting to Login...", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: theme.palette.mode,
-        transition: Bounce,
-      });
-      setLoggedIn(true);
+
+      if (!success) throw new Error();
+
+      const storage: Storage =
+        fromData.get("rememberMe") === "on" ? localStorage : sessionStorage;
+      storage.setItem("token", payload.accessToken);
+
       setTimeout(() => {
+        setLoggedIn(true);
+        setLoading(false);
         navigate("/dashboard");
-      }, 5000);
+      }, 2000);
     } catch (err) {
-      console.log(err);
       let msg = null;
-      if (err instanceof AxiosError) msg = err.response?.data?.error;
-      toast.error(msg ?? "An error occured!", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: theme.palette.mode,
-        transition: Bounce,
-      });
+      if (isAxiosError<errorResponse>(err)) msg = err.response?.data.error;
+      toast.error(msg ?? "An error occured!");
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -179,15 +179,16 @@ export default function Login() {
                 </Link>
               </Grid>
             </Grid>
-            <Button
+            <LoadingButton
+              loading={isLoading}
               type="submit"
               fullWidth
               size="large"
               variant="contained"
               sx={{ mt: 1.5, mb: 2 }}
             >
-              Login
-            </Button>
+              <span>Login</span>
+            </LoadingButton>
           </Box>
           <Divider flexItem>OR</Divider>
 

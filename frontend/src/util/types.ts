@@ -1,18 +1,41 @@
+import { SvgIconComponent } from "@mui/icons-material";
 import { PaletteMode } from "@mui/material";
-import React, { ReactElement } from "react";
+import React from "react";
 
-export type themeTogglerProps = {
-  mode: PaletteMode;
-  toggleColorMode: () => void;
-};
-
-export type authContext = {
+export type authContextType = {
+  user: CustomJWTPayload;
   isLoggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type themeContextType = {
+  mode: PaletteMode;
+  toggleColorMode: () => void;
 };
 
 export type feature = {
   title: string;
   description: string;
-  logo: ReactElement;
+  Icon: SvgIconComponent;
 };
+
+export type errorResponse = {
+  success: boolean;
+  error: string;
+  timeStamp: Date;
+};
+
+export interface successResponse {
+  success: boolean;
+  payload: object;
+  timeStamp: Date;
+}
+
+export interface loginResponse extends successResponse {
+  payload: { accessToken: string };
+}
+
+export interface CustomJWTPayload {
+  userId: string;
+  email: string;
+}

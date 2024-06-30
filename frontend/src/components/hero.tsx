@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Button, Grid, Typography, useTheme, Box } from "@mui/material";
 import { ArrowForwardIos, Code } from "@mui/icons-material";
 import heroBg from "../assets/hero-bg.svg";
 

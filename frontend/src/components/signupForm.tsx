@@ -1,14 +1,12 @@
-import * as React from "react";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Avatar,
-  Button,
   TextField,
   Link,
   Grid,
-  Box,
   Typography,
   Container,
   Checkbox,
@@ -22,6 +20,7 @@ import {
   Paper,
   Stack,
   useTheme,
+  Box,
 } from "@mui/material";
 import {
   LockOutlined,
@@ -31,10 +30,13 @@ import {
   VisibilityOff,
   Visibility,
 } from "@mui/icons-material";
-import axios, { AxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
+import { LoadingButton } from "@mui/lab";
+import { errorResponse } from "../util/types";
 
 export default function SignUp() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const bgColor =
@@ -44,36 +46,26 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const url = import.meta.env["VITE_BACKEND_ENDPOINT"];
-    const endpoint = url + "/register";
     const data = new FormData(event.currentTarget);
-    console.log(endpoint);
+    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/register";
     try {
       await axios.post(endpoint, {
         name: data.get("firstName") + " " + data.get("lastName"),
         email: data.get("email"),
         password: data.get("password"),
       });
-      console.log(data.get("rememberMe"));
-      toast.success("User registered successfully! Redirecting to Login...", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: theme.palette.mode,
-        transition: Bounce,
-      });
+      toast.success("User registered successfully!");
       setTimeout(() => {
+        setLoading(false);
         navigate("/login");
-      }, 5000);
+      }, 2000);
     } catch (err) {
-      console.log(err);
       let msg = null;
-      if (err instanceof AxiosError) msg = err.response?.data?.error;
-      toast.error(msg ?? "An error occured!", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: theme.palette.mode,
-        transition: Bounce,
-      });
+      if (isAxiosError<errorResponse>(err)) msg = err.response?.data.error;
+      toast.error(msg ?? "An error occured!");
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -191,15 +183,16 @@ export default function SignUp() {
               label="Remember me"
               sx={{ mt: 1.5 }}
             />
-            <Button
+            <LoadingButton
+              loading={isLoading}
               type="submit"
               fullWidth
               size="large"
               variant="contained"
               sx={{ mt: 1.5, mb: 2 }}
             >
-              Sign Up
-            </Button>
+              <span>Sign Up</span>
+            </LoadingButton>
           </Box>
           <Divider flexItem>OR</Divider>
 
@@ -229,7 +222,6 @@ export default function SignUp() {
           </Typography>
         </Paper>
       </Container>
-      <ToastContainer />
     </Container>
   );
 }

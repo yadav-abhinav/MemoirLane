@@ -1,31 +1,6 @@
 import { Avatar, Divider, Paper, Stack, Typography } from "@mui/material";
 import { feature } from "../util/types";
-import {
-  IosShare,
-  AutoFixHigh,
-  CollectionsBookmark,
-} from "@mui/icons-material";
-
-const featureList: feature[] = [
-  {
-    title: "Photo Sharing",
-    description:
-      "Capture, share, and relive your favorite moments with our seamless photo sharing feature. Easily upload your photos and add captions to preserve memories.",
-    logo: <IosShare />,
-  },
-  {
-    title: "Photo Editing",
-    description:
-      "Unleash your creativity with our powerful photo editing feature. Enhance your images with a variety of tools, including filters, cropping and more, and special effects.",
-    logo: <AutoFixHigh />,
-  },
-  {
-    title: "Photo Album",
-    description:
-      "Organize and cherish your memories with our versatile photo album feature. Create custom albums to categorize your photos and easily navigate your collection.",
-    logo: <CollectionsBookmark />,
-  },
-];
+import { featureList } from "../util/constants";
 
 const getFeatureCard = (id: number, feature: feature) => {
   return (
@@ -40,7 +15,9 @@ const getFeatureCard = (id: number, feature: feature) => {
         background: "transparent",
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>{feature.logo}</Avatar>
+      <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+        <feature.Icon />
+      </Avatar>
 
       <Typography variant="button">{feature.title}</Typography>
       <Typography
