@@ -15,6 +15,7 @@ const userSessionSchema = new mongoose.Schema<IUserSession>({
   createdAt: {
     type: Date,
     required: true,
+    default: new Date(),
   },
 });
 

@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { ZodError } from "zod";
-import { v4 as uuidv4 } from "uuid";
 import HttpStatus from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
 import { constructSucessResponse } from "../utils/responseGenerator";
@@ -23,7 +22,6 @@ export async function createNewUser(
     const userInfo = CreateUserDto.parse(req.body);
     const passwordHash = await bcrypt.hash(userInfo.password, 10);
     const newUser = await User.create({
-      id: uuidv4(),
       name: userInfo.name,
       email: userInfo.email,
       password: passwordHash,
@@ -64,7 +62,7 @@ export async function loginUser(
     const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user);
     await UserSesion.findOneAndUpdate(
       { userId: user.id },
-      { refreshToken, createdAt: new Date() },
+      { refreshToken },
       { upsert: true }
     );
 

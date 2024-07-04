@@ -1,27 +1,27 @@
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
-import { IUser } from "../entity/user.entity";
+import { IMedia } from "../entity/media.entity";
 
-const userSchema = new mongoose.Schema<IUser>({
+const mediaSchema = new mongoose.Schema<IMedia>({
   id: {
     type: String,
     unique: true,
     required: true,
     default: uuidv4(),
   },
-  name: {
+  src: {
     type: String,
     required: true,
   },
-  email: {
+  fileName: {
     type: String,
-    unique: true,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
+  caption: String,
+  uploadedAt: {
+    type: Date,
+    default: new Date(),
   },
 });
 
-export const User = mongoose.model("User", userSchema);
+export const Media = mongoose.model("Media", mediaSchema);

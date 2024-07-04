@@ -1,18 +1,15 @@
-import dotenv from "dotenv";
-dotenv.config({
-  path: [".env.local", ".env"],
-});
-import "./config/zod.config";
+import "./config";
+import cors from "cors";
 import express from "express";
 import connect from "./db/connection";
-import authRoutes from "./routes/auth.routes";
-import verifyJWT from "./middleware/jwt";
-import { CustomRequest } from "./entity/auth.entity";
-import cors from "cors";
-import logger from "./utils/logger";
-import requestLogger from "./middleware/logger";
 import cookieParser from "cookie-parser";
+import logger from "./utils/logger";
+import verifyJWT from "./middleware/jwt";
+import authRoutes from "./routes/auth.routes";
+import mediaRoutes from "./routes/media.routes";
+import requestLogger from "./middleware/logger";
 import errorHandler from "./middleware/errHandler";
+import { CustomRequest } from "./entity/auth.entity";
 
 await connect();
 const port = process.env.PORT ?? 8080;
@@ -22,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(requestLogger);
+app.use("/media", verifyJWT, mediaRoutes);
 app.use(authRoutes);
 
 app.get("/", verifyJWT, (req, res) => {
