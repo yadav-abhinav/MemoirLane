@@ -59,7 +59,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-function ThemeToggler({ sx }: BoxProps) {
+export default function ThemeToggler({ sx }: BoxProps) {
   const { mode, toggleColorMode } = useContext(themeContext);
   return (
     <MaterialUISwitch
@@ -69,5 +69,3 @@ function ThemeToggler({ sx }: BoxProps) {
     />
   );
 }
-
-export default ThemeToggler;

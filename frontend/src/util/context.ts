@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { CustomJWTPayload, authContextType, themeContextType } from "./types";
+import { JWTPayload, AuthContextType, themeContextType } from "./types";
 
-export const authContext = createContext<authContextType>({
-  user: {} as CustomJWTPayload,
+export const authContext = createContext<AuthContextType>({
+  user: {} as JWTPayload,
   isLoggedIn: false,
   setLoggedIn: () => {},
 });

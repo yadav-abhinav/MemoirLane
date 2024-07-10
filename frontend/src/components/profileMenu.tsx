@@ -15,7 +15,7 @@ import { profileSettings } from "../util/constants";
 import { authContext } from "../util/context";
 import { useNavigate } from "react-router-dom";
 
-function ProfileMenu(props: BoxProps) {
+export default function ProfileMenu(props: BoxProps) {
   const theme = useTheme();
   const navigate = useNavigate();
   const { user, setLoggedIn } = useContext(authContext);
@@ -103,5 +103,3 @@ function ProfileMenu(props: BoxProps) {
     </Box>
   );
 }
-
-export default ProfileMenu;

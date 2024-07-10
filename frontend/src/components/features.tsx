@@ -1,8 +1,8 @@
 import { Avatar, Divider, Paper, Stack, Typography } from "@mui/material";
-import { feature } from "../util/types";
-import { featureList } from "../util/constants";
+import { Feature } from "../util/types";
+import { FeatureList } from "../util/constants";
 
-const getFeatureCard = (id: number, feature: feature) => {
+const getFeatureCard = (id: number, Feature: Feature) => {
   return (
     <Paper
       key={id}
@@ -16,10 +16,10 @@ const getFeatureCard = (id: number, feature: feature) => {
       }}
     >
       <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-        <feature.Icon />
+        <Feature.Icon />
       </Avatar>
 
-      <Typography variant="button">{feature.title}</Typography>
+      <Typography variant="button">{Feature.title}</Typography>
       <Typography
         sx={{ fontSize: 14 }}
         color="text.secondary"
@@ -27,13 +27,13 @@ const getFeatureCard = (id: number, feature: feature) => {
         align="center"
         justifyContent="center"
       >
-        {feature.description}
+        {Feature.description}
       </Typography>
     </Paper>
   );
 };
 
-function Features() {
+export default function Features() {
   return (
     <Stack
       mt="2rem"
@@ -44,9 +44,7 @@ function Features() {
       alignItems="center"
       justifyContent="center"
     >
-      {featureList.map((feature, index) => getFeatureCard(index, feature))}
+      {FeatureList.map((Feature, index) => getFeatureCard(index, Feature))}
     </Stack>
   );
 }
-
-export default Features;

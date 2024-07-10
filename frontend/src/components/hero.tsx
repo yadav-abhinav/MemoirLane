@@ -2,7 +2,7 @@ import { Button, Grid, Typography, useTheme, Box } from "@mui/material";
 import { ArrowForwardIos, Code } from "@mui/icons-material";
 import heroBg from "../assets/hero-bg.svg";
 
-function Hero() {
+export default function Hero() {
   const theme = useTheme();
   const bgColor =
     theme.palette.mode === "light"
@@ -126,5 +126,3 @@ function Hero() {
     </>
   );
 }
-
-export default Hero;

@@ -18,7 +18,7 @@ import ProfileMenu from "./profileMenu";
 import { navPages } from "../util/constants";
 import NavMenu from "./navMenu";
 
-function Navbar() {
+export default function Navbar() {
   const { isLoggedIn } = useContext(authContext);
   const theme = useTheme();
 
@@ -122,19 +122,16 @@ function Navbar() {
                   <Divider
                     key={id + 1}
                     orientation="vertical"
-                    variant="middle"
                     flexItem
-                    sx={{ mx: "0.5rem", my: "0.5rem" }}
+                    sx={{ m: "0.5rem" }}
                   />
                 )}
                 <Button
-                  key={id}
                   // onClick={handleCloseNavMenu}
                   href={page.href}
                   sx={{
                     my: 1,
                     color: theme.palette.text.secondary,
-                    display: "block",
                   }}
                 >
                   {page.title}
@@ -171,4 +168,3 @@ function Navbar() {
     </AppBar>
   );
 }
-export default Navbar;

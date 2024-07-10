@@ -1,4 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Avatar,
   TextField,
@@ -20,7 +23,7 @@ import {
   Box,
 } from "@mui/material";
 import {
-  Login as LoginIcon,
+  LockOutlined,
   Facebook,
   Google,
   GitHub,
@@ -28,16 +31,12 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import axios, { isAxiosError } from "axios";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { authContext } from "../util/context";
-import { errorResponse, loginResponse } from "../util/types";
 import { LoadingButton } from "@mui/lab";
+import { ErrorResponse } from "../util/types";
 
-export default function Login() {
+export default function SignUp() {
   const [isLoading, setLoading] = useState<boolean>(false);
-  const { setLoggedIn } = useContext(authContext);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
   const bgColor =
@@ -47,31 +46,22 @@ export default function Login() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
-    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/login";
-    const fromData = new FormData(event.currentTarget);
+    const data = new FormData(event.currentTarget);
+    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/register";
     try {
-      const {
-        data: { success, payload },
-      } = await axios.post<loginResponse>(endpoint, {
-        email: fromData.get("email"),
-        password: fromData.get("password"),
+      await axios.post(endpoint, {
+        name: data.get("firstName") + " " + data.get("lastName"),
+        email: data.get("email"),
+        password: data.get("password"),
       });
-
-      if (!success) throw new Error();
-
-      const storage: Storage =
-        fromData.get("rememberMe") === "on" ? localStorage : sessionStorage;
-      storage.setItem("token", payload.accessToken);
-
+      toast.success("User registered successfully!");
       setTimeout(() => {
-        setLoggedIn(true);
         setLoading(false);
-        navigate("/dashboard");
+        navigate("/login");
       }, 2000);
     } catch (err) {
       let msg = null;
-      if (isAxiosError<errorResponse>(err)) msg = err.response?.data.error;
+      if (isAxiosError<ErrorResponse>(err)) msg = err.response?.data.error;
       toast.error(msg ?? "An error occured!");
       setTimeout(() => {
         setLoading(false);
@@ -82,6 +72,12 @@ export default function Login() {
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
   };
+
+  // const handleMouseDownPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
 
   return (
     <Container
@@ -98,9 +94,10 @@ export default function Login() {
         maxWidth="xs"
         sx={{
           paddingTop: {
-            xs: "8rem",
+            xs: "6rem",
             md: "10rem",
           },
+          background: "radial-gradient",
         }}
         disableGutters
       >
@@ -115,18 +112,39 @@ export default function Login() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-            <LoginIcon />
+            <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Login
+            Sign Up
           </Typography>
           <Box
             component="form"
-            noValidate
+            // noValidate
             onSubmit={handleSubmit}
             sx={{ my: 3 }}
           >
             <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -134,12 +152,11 @@ export default function Login() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  autoComplete="email"
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth required>
-                  <InputLabel>Password</InputLabel>
+                  <InputLabel>Create a password</InputLabel>
                   <OutlinedInput
                     id="password"
                     name="password"
@@ -156,29 +173,16 @@ export default function Login() {
                         </IconButton>
                       </InputAdornment>
                     }
-                    label="Password"
+                    label="Create a password"
                   />
                 </FormControl>
               </Grid>
             </Grid>
-            <Grid
-              container
-              justifyContent="space-between"
-              alignItems="center"
+            <FormControlLabel
+              control={<Checkbox name="rememberMe" defaultChecked />}
+              label="Remember me"
               sx={{ mt: 1.5 }}
-            >
-              <Grid item>
-                <FormControlLabel
-                  control={<Checkbox name="rememberMe" defaultChecked />}
-                  label="Remember me"
-                />
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-            </Grid>
+            />
             <LoadingButton
               loading={isLoading}
               type="submit"
@@ -187,7 +191,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 1.5, mb: 2 }}
             >
-              <span>Login</span>
+              <span>Sign Up</span>
             </LoadingButton>
           </Box>
           <Divider flexItem>OR</Divider>
@@ -211,9 +215,9 @@ export default function Login() {
           </Stack>
 
           <Typography variant="body2" sx={{ mt: "1.5rem" }}>
-            Don't have an account?
-            <Link href="\signup" variant="body2" sx={{ ml: "0.5rem" }}>
-              Sign up
+            Already have an account?
+            <Link href="\login" variant="body2" sx={{ ml: "0.5rem" }}>
+              Login
             </Link>
           </Typography>
         </Paper>

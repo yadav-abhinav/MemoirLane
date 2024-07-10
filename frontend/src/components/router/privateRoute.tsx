@@ -5,5 +5,5 @@ import { authContext } from "../../util/context";
 export default function PrivateRoute({ element }: { element: ReactNode }) {
   const { isLoggedIn } = useContext(authContext);
 
-  return isLoggedIn ? element : <Navigate to={"/"} replace />;
+  return isLoggedIn ? element : <Navigate to={"/explore"} replace />;
 }
