@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { lighten } from "@mui/material/styles";
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import ImageGrid from "./imageGrid";
 import { imageGridDimensions } from "../util/constants";
 import { MediaInfo, MediaTimelineMap } from "../util/types";
@@ -12,6 +11,7 @@ function groupImageData(imageData: MediaInfo[]) {
     randomDate.setDate(Math.floor(Math.random() * 7 + 1));
     randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
     item.uploadedAt = randomDate;
+    item.src = item.download_url;
     const year = item.uploadedAt.getFullYear();
     const month = item.uploadedAt.getMonth();
     const day = item.uploadedAt.getDate();
@@ -27,7 +27,6 @@ function groupImageData(imageData: MediaInfo[]) {
 }
 
 export default function MediaContainer() {
-  const theme = useTheme();
   const [imageData, setData] = useState<MediaTimelineMap>({});
 
   const getImageData = async () => {
@@ -43,13 +42,14 @@ export default function MediaContainer() {
   }, []);
   return (
     <Box
-      overflow="auto"
-      pl="2.5rem"
-      position="relative"
+      pl={{ md: "3.5rem", xs: "1.5rem" }}
+      pt="2rem"
+      position={{ md: "relative", xs: "static" }}
       left="-2.4rem"
       sx={{
-        background: lighten(theme.palette.background.paper, 0.1356),
-        borderRadius: "2.5rem 0 0 2.5rem",
+        background: "inherit",
+        borderRadius: "2.5rem",
+        overflowY: "scroll",
         "&::-webkit-scrollbar": {
           display: "none",
         },
@@ -64,14 +64,17 @@ export default function MediaContainer() {
             year: "numeric",
           });
           return (
-            <Box key={month} pt="3rem">
+            <Box key={month}>
               <Typography variant="h4">{dateHeading}</Typography>
               <Stack
-                direction="row"
+                direction={{ xs: "column", md: "row" }}
+                // direction="row"
                 useFlexGap
                 spacing={1}
                 flexWrap="wrap"
-                sx={{ columnGap: "3.5rem" }}
+                pb="3rem"
+                pr="1.5rem"
+                sx={{ columnGap: { md: "3.5rem" } }}
               >
                 {Object.keys(imageData[month])
                   .sort((a, b) => parseInt(b) - parseInt(a))
@@ -86,7 +89,7 @@ export default function MediaContainer() {
                       }
                     );
                     return (
-                      <Box key={day}>
+                      <Box key={day} width={{ xs: "100%", md: "fit-content" }}>
                         <Typography variant="button" color="text.secondary">
                           {dayHeading}
                         </Typography>

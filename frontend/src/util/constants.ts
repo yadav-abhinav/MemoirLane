@@ -1,10 +1,12 @@
 import { Feature } from "./types";
 import {
+  Link,
   IosShare,
   AutoFixHigh,
   CollectionsBookmark,
   FavoriteBorder,
   CollectionsOutlined,
+  AddPhotoAlternateOutlined,
 } from "@mui/icons-material";
 import {
   PeopleOutlined,
@@ -58,11 +60,13 @@ export const dashPanelMenuList = [
   { title: "Photos", href: "/", Icon: PhotoOutlined },
   { title: "Shared", href: "#", Icon: PeopleOutlined },
   { title: "Favourites", href: "/", Icon: FavoriteBorder },
-  {
-    title: "Albums",
-    href: "https://github.com/yadav-abhinav/MemoirLane.git",
-    Icon: CollectionsOutlined,
-  },
+  { title: "Albums", href: "#", Icon: CollectionsOutlined },
+];
+
+export const uploadActions = [
+  { title: "Local Device", href: "/", Icon: AddPhotoAlternateOutlined },
+  { title: "Image link", href: "/", Icon: Link },
+  { title: "Album", href: "#", Icon: CollectionsOutlined },
 ];
 
 export const imageGridDimensions = [

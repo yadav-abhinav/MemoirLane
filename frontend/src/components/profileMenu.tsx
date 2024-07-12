@@ -3,7 +3,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Tooltip,
   Typography,
   useTheme,
   Box,
@@ -48,27 +47,29 @@ export default function ProfileMenu(props: BoxProps) {
         borderRadius: "20px",
       }}
     >
-      <Tooltip title="Open settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar
-            src="/static/images/avatar/2.jpg"
-            sx={{
-              bgcolor: theme.palette.mode === "light" ? "#11999E" : "#52D3D8",
-              height: "38px",
-              width: "38px",
-            }}
-          />
-          <Typography
-            display={{ md: "block", xs: "none" }}
-            variant="overline"
-            fontWeight={500}
-            color="text.primary"
-            m="0.1rem 1rem 0 0.5rem"
-          >
-            Hello {user.email}!
-          </Typography>
-        </IconButton>
-      </Tooltip>
+      <IconButton
+        disableTouchRipple
+        onClick={handleOpenUserMenu}
+        sx={{ p: 0, borderRadius: "inherit" }}
+      >
+        <Avatar
+          src="/static/images/avatar/2.jpg"
+          sx={{
+            bgcolor: theme.palette.mode === "light" ? "#11999E" : "#52D3D8",
+            height: "38px",
+            width: "38px",
+          }}
+        />
+        <Typography
+          display={{ md: "block", xs: "none" }}
+          variant="overline"
+          fontWeight={500}
+          color="text.primary"
+          m="0.1rem 1rem 0 0.5rem"
+        >
+          Hello {user.email}!
+        </Typography>
+      </IconButton>
       <Menu
         sx={{ mt: "45px" }}
         id="menu-appbar"

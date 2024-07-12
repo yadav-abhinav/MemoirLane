@@ -2,8 +2,13 @@ import { Container, Paper, useTheme } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
 import DashPanel from "../components/dashpanel";
 import MediaContainer from "../components/mediaContainer";
+import { useState } from "react";
+import BottomPanel from "../components/bottomDashpanel";
+import Uploader from "../components/uploader";
 
 export default function Dashboard() {
+  const [selected, setSelected] = useState(0);
+
   const theme = useTheme();
   const bgColor =
     theme.palette.mode === "light"
@@ -15,23 +20,33 @@ export default function Dashboard() {
       disableGutters
       sx={{
         background: `radial-gradient(circle at 50%, transparent, transparent 50%, ${bgColor} 100%)`,
-        minHeight: "100vh",
-        p: "6rem 6rem 1rem 6rem",
+        height: "100%",
+        p: { md: "6rem 6rem 2rem", xs: "5.75rem 1rem 2.5rem" },
       }}
     >
       <Paper
         elevation={10}
         sx={{
-          height: "calc(100vh - 7rem)",
+          height: "100%",
           borderRadius: "2.5rem",
           display: "flex",
         }}
       >
-        <DashPanel />
+        <DashPanel
+          display={{ md: "block", xs: "none" }}
+          selected={selected}
+          setSelected={setSelected}
+        />
         <Routes>
           <Route path="/" element={<MediaContainer />} />
           <Route path="*" element={<Navigate to={"/"} />} />
         </Routes>
+        <BottomPanel
+          display={{ md: "none", xs: "block" }}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Uploader />
       </Paper>
     </Container>
   );

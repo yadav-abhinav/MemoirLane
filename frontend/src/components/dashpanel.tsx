@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Divider,
   List,
   ListItem,
@@ -9,23 +10,29 @@ import {
   ListSubheader,
 } from "@mui/material";
 import { dashPanelMenuList, profileSettings } from "../util/constants";
-import { useState } from "react";
 import { darkTheme } from "../util/theme";
+import { Dispatch, SetStateAction } from "react";
 
-export default function DashPanel() {
-  const [selected, setSelected] = useState(0);
-
+export default function DashPanel({
+  display,
+  selected,
+  setSelected,
+}: BoxProps & {
+  selected: number;
+  setSelected: Dispatch<SetStateAction<number>>;
+}) {
   return (
     <Box
-      overflow="auto"
       sx={{
+        display,
         bgcolor: "rgb(38, 80, 115)",
-        minWidth: "20rem",
+        minWidth: "18.5rem",
         pt: "2rem",
         borderRadius: "2.5rem 0 0 2.5rem",
         "&::-webkit-scrollbar": {
           display: "none",
         },
+        overflowY: "auto",
       }}
     >
       <List>

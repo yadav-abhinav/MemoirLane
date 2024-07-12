@@ -1,14 +1,14 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import { authContext } from "../../util/context";
-import { CustomJWTPayload } from "../../util/types";
+import { JWTPayload } from "../../util/types";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [isLoggedIn, setLoggedIn] = useState<boolean>(() => {
     const token = localStorage.getItem("token");
     if (token?.length) return true;
-    return false;
+    return true;
   });
-  const [user, setUser] = useState<CustomJWTPayload>({ userId: "", email: "" });
+  const [user, setUser] = useState<JWTPayload>({ userId: "", email: "" });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
