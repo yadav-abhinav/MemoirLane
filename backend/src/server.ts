@@ -9,7 +9,6 @@ import authRoutes from "./routes/auth.routes";
 import mediaRoutes from "./routes/media.routes";
 import requestLogger from "./middleware/logger";
 import errorHandler from "./middleware/errHandler";
-import { CustomRequest } from "./entity/auth.entity";
 
 await connect();
 const port = process.env.PORT ?? 8080;
@@ -23,8 +22,7 @@ app.use("/media", verifyJWT, mediaRoutes);
 app.use(authRoutes);
 
 app.get("/", verifyJWT, (req, res) => {
-  const email = (req as CustomRequest).email;
-  res.send(`Hello ${email}`);
+  res.send(`Hello ${req.email}`);
 });
 
 app.use(errorHandler);

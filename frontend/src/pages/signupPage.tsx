@@ -30,9 +30,9 @@ import {
   VisibilityOff,
   Visibility,
 } from "@mui/icons-material";
-import axios, { isAxiosError } from "axios";
 import { LoadingButton } from "@mui/lab";
-import { ErrorResponse } from "../util/types";
+import request from "../util/requestHandler";
+import ApiError from "../util/apiError";
 
 export default function SignUp() {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -47,25 +47,19 @@ export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/register";
     try {
-      await axios.post(endpoint, {
+      await request.post<{ accessToken: string }>("register", {
         name: data.get("firstName") + " " + data.get("lastName"),
         email: data.get("email"),
         password: data.get("password"),
       });
-      toast.success("User registered successfully!");
       setTimeout(() => {
         setLoading(false);
         navigate("/login");
       }, 2000);
     } catch (err) {
-      let msg = null;
-      if (isAxiosError<ErrorResponse>(err)) msg = err.response?.data.error;
-      toast.error(msg ?? "An error occured!");
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setLoading(false);
+      toast.error((err as ApiError).message);
     }
   };
 

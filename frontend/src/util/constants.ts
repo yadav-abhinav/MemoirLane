@@ -18,11 +18,12 @@ import {
   TipsAndUpdatesOutlined,
   GitHub,
 } from "@mui/icons-material";
+import { Slide, ToastOptions, ToastPromiseParams } from "react-toastify";
 
 export const profileSettings = [
   { title: "Profile", href: "/", Icon: Person4Outlined },
   { title: "Settings", href: "/", Icon: SettingsOutlined },
-  { title: "Logout", href: "logout", Icon: LogoutOutlined },
+  { title: "Logout", href: "/logout", Icon: LogoutOutlined },
 ];
 
 export const navPages = [
@@ -64,10 +65,28 @@ export const dashPanelMenuList = [
 ];
 
 export const uploadActions = [
-  { title: "Local Device", href: "/", Icon: AddPhotoAlternateOutlined },
-  { title: "Image link", href: "/", Icon: Link },
-  { title: "Album", href: "#", Icon: CollectionsOutlined },
+  {
+    id: "local",
+    title: "Local device",
+    href: "/",
+    Icon: AddPhotoAlternateOutlined,
+  },
+  { id: "link", title: "Image link", href: "/", Icon: Link },
+  { id: "album", title: "Album", href: "#", Icon: CollectionsOutlined },
 ];
+
+export const toastOptions = (
+  itemSize: number
+): [ToastPromiseParams, ToastOptions] => {
+  return [
+    {
+      pending: `Uploading ${itemSize} item(s)`,
+      success: "Image(s) uploaded successfully",
+      error: "Error uploading image(s)",
+    },
+    { position: "bottom-left", transition: Slide },
+  ];
+};
 
 export const imageGridDimensions = [
   [2, 2],

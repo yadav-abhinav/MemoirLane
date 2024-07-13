@@ -9,6 +9,7 @@ import AuthRoute from "./components/router/authRoute";
 import PrivateRoute from "./components/router/privateRoute";
 import Dashboard from "./pages/dashboard";
 import { AuthProvider } from "./components/provider/authProvider";
+import Logout from "./components/logout";
 
 function App() {
   const theme = useTheme();
@@ -22,6 +23,10 @@ function App() {
           <Route path="/explore" element={<Landing />} />
           <Route path="/signup" element={<AuthRoute element={<SignUp />} />} />
           <Route path="/login" element={<AuthRoute element={<Login />} />} />
+          <Route
+            path="/logout"
+            element={<PrivateRoute element={<Logout />} />}
+          />
           <Route path="/*" element={<PrivateRoute element={<Dashboard />} />} />
         </Routes>
       </AuthProvider>

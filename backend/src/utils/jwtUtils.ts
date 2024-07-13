@@ -1,7 +1,7 @@
 import { CustomJWTPayload } from "../entity/auth.entity";
 import { IUser } from "../entity/user.entity";
 import jwt from "jsonwebtoken";
-import HttpStatus from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { UserSesion } from "../models/userSession.model";
 import ApiError from "./apiError";
 
@@ -10,7 +10,7 @@ export function generateAccessAndRefreshTokens({ id, email }: Partial<IUser>) {
     { userId: id, email },
     process.env["ACCESS_TOKEN_SECRET_KEY"]!,
     {
-      expiresIn: "10m",
+      expiresIn: "15m",
     }
   );
 
@@ -24,9 +24,9 @@ export function generateAccessAndRefreshTokens({ id, email }: Partial<IUser>) {
 
 export async function verifyRefreshToken(refreshToken: string) {
   if (!refreshToken) {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorized");
+    throw new ApiError(StatusCodes.UNAUTHORIZED, "Unauthorized");
   }
-  
+
   const { userId, email } = jwt.verify(
     refreshToken,
     process.env["REFRESH_TOKEN_SECRET_KEY"]!
@@ -34,7 +34,7 @@ export async function verifyRefreshToken(refreshToken: string) {
   const prevSession = await UserSesion.findOne({ refreshToken });
 
   if (!prevSession || prevSession.userId !== userId) {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorized");
+    throw new ApiError(StatusCodes.UNAUTHORIZED, "Unauthorized");
   }
 
   return { userId, email };

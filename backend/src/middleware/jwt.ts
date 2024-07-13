@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import HttpStatus from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { CustomRequest } from "../entity/auth.entity";
-import { verifyRefreshToken } from "../utils/jwt";
+import { verifyRefreshToken } from "../utils/jwtUtils";
 import ApiError from "../utils/apiError";
+import logger from "../utils/logger";
+import { error } from "console";
 
 export default async function verifyJWT(
   req: Request,
@@ -13,15 +14,14 @@ export default async function verifyJWT(
   try {
     const accessToken = req.header("Authorization")!.split(" ")[1];
     jwt.verify(accessToken, process.env["ACCESS_TOKEN_SECRET_KEY"]!);
-    const refreshToken = req.cookies?.token;
+    const refreshToken = req.cookies?.rtoken;
     const { userId, email } = await verifyRefreshToken(refreshToken);
 
-    (req as CustomRequest).userId = userId;
-    (req as CustomRequest).email = email;
+    req.userId = userId;
+    req.email = email;
     next();
   } catch (err) {
-    if (err instanceof jwt.TokenExpiredError)
-      next(new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorized"));
-    else next(err);
+    logger.debug(err);
+    next(new ApiError(StatusCodes.UNAUTHORIZED, "Unauthorized"));
   }
 }

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 export default function ProfileMenu(props: BoxProps) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { user, setLoggedIn } = useContext(authContext);
+  const { user } = useContext(authContext);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -28,10 +28,7 @@ export default function ProfileMenu(props: BoxProps) {
     event.preventDefault();
     setAnchorElUser(null);
     const href = event.currentTarget.dataset.href!;
-    if (href === "logout") {
-      localStorage.removeItem("token");
-      setLoggedIn(false);
-    } else navigate(href);
+    navigate(href);
   };
 
   return (

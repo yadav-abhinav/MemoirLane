@@ -44,12 +44,9 @@ export type MediaTimelineMap = {
   [month: string]: { [day: string]: MediaInfo[] };
 };
 
-export interface SuccessResponse {
+export interface SuccessResponse<T> {
   success: boolean;
-  payload: object;
+  payload: T;
   timeStamp: Date;
 }
 
-export interface LoginResponse extends SuccessResponse {
-  payload: { accessToken: string };
-}

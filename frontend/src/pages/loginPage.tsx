@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   TextField,
@@ -27,12 +27,12 @@ import {
   VisibilityOff,
   Visibility,
 } from "@mui/icons-material";
-import axios, { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { authContext } from "../util/context";
-import { ErrorResponse, LoginResponse } from "../util/types";
 import { LoadingButton } from "@mui/lab";
+import request from "../util/requestHandler";
+import ApiError from "../util/apiError";
 
 export default function Login() {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -45,37 +45,35 @@ export default function Login() {
       ? "rgba(17, 153, 158, 0.3)"
       : "rgba(38, 80, 115, 0.3)";
 
+  useEffect(() => {
+    if (expired) toast.error("You need to log in first!");
+  }, [redirect]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    const endpoint = import.meta.env["VITE_BACKEND_ENDPOINT"] + "/login";
     const fromData = new FormData(event.currentTarget);
     try {
-      const {
-        data: { success, payload },
-      } = await axios.post<LoginResponse>(endpoint, {
-        email: fromData.get("email"),
-        password: fromData.get("password"),
-      });
-
-      if (!success) throw new Error();
+      const { accessToken } = await request.post<{ accessToken: string }>(
+        "login",
+        {
+          email: fromData.get("email"),
+          password: fromData.get("password"),
+        }
+      );
 
       const storage: Storage =
         fromData.get("rememberMe") === "on" ? localStorage : sessionStorage;
-      storage.setItem("token", payload.accessToken);
+      storage.setItem("token", accessToken);
 
       setTimeout(() => {
         setLoggedIn(true);
         setLoading(false);
         navigate("/dashboard");
-      }, 2000);
-    } catch (err) {
-      let msg = null;
-      if (isAxiosError<ErrorResponse>(err)) msg = err.response?.data.error;
-      toast.error(msg ?? "An error occured!");
-      setTimeout(() => {
-        setLoading(false);
       }, 1000);
+    } catch (err) {
+      setLoading(false);
+      toast.error((err as ApiError).message);
     }
   };
 

@@ -4,14 +4,16 @@ import { JWTPayload } from "../../util/types";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [isLoggedIn, setLoggedIn] = useState<boolean>(() => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") ?? sessionStorage.getItem("token");
     if (token?.length) return true;
-    return true;
+    return false;
   });
   const [user, setUser] = useState<JWTPayload>({ userId: "", email: "" });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") ?? sessionStorage.getItem("token");
     if (token?.length) {
       try {
         const userInfo = JSON.parse(atob(token.split(".")[1]));
