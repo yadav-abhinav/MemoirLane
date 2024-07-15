@@ -1,4 +1,3 @@
-import express from "express";
 import { NextFunction, Request, Response } from "express";
 import { v2 as cloudinary, UploadApiResponse, v2 } from "cloudinary";
 import ApiError from "../utils/apiError";
@@ -6,8 +5,10 @@ import { Media } from "../models/media.model";
 import { v4 as uuidv4 } from "uuid";
 import { constructSucessResponse } from "../utils/responseGenerator";
 import { StatusCodes } from "http-status-codes";
-import { Document } from "mongoose";
-import logger from "../utils/logger";
+import mongoose, { Document } from "mongoose";
+import { User } from "../models/user.model";
+import { IMedia } from "../entity/media.entity";
+import { IUser } from "../entity/user.entity";
 
 const uploadToCloud = (
   file: Express.Multer.File,
@@ -29,6 +30,20 @@ const uploadToCloud = (
   });
 };
 
+const saveMediaToUser = async (
+  res: Response,
+  user: (mongoose.Document<unknown, {}, IUser> & IUser) | null,
+  media: IMedia
+) => {
+  if (!user) {
+    res.redirect("/logout");
+    throw new ApiError(StatusCodes.NOT_FOUND, "User Not found");
+  }
+  const uploadedMedia = new Media(media);
+  user.images.push(uploadedMedia);
+  return uploadedMedia.save();
+};
+
 export async function uploadMediaLocal(
   req: Request,
   res: Response,
@@ -36,6 +51,7 @@ export async function uploadMediaLocal(
 ) {
   try {
     const files = req.files as Express.Multer.File[];
+    const user = await User.findOne({ id: req.userId });
     if (!files?.length)
       throw new ApiError(StatusCodes.BAD_REQUEST, "No files uploaded");
 
@@ -43,15 +59,15 @@ export async function uploadMediaLocal(
     for (const file of files) {
       const { url, display_name } = await uploadToCloud(file, req.userId!);
 
-      const uploadedMedia = new Media({
+      await saveMediaToUser(res, user, {
         id: display_name,
         src: url,
         fileName: file.originalname,
       });
-      promiseList.push(uploadedMedia.save());
     }
 
     await Promise.all(promiseList);
+    await user!.save();
     constructSucessResponse(res);
     next();
   } catch (err) {
@@ -65,20 +81,24 @@ export async function uploadMediaLink(
   next: NextFunction
 ) {
   try {
+    const mediaId = uuidv4();
     const { src }: { src: string } = req.body;
+    const user = await User.findOne({ id: req.userId });
     if (!src) throw new ApiError(StatusCodes.BAD_REQUEST, "Invaild media link");
-    const { url, display_name } = await v2.uploader.upload(src, {
-      public_id: `${req.userId}/${uuidv4()}`,
+
+    const { url } = await v2.uploader.upload(src, {
+      public_id: `${req.userId}/${mediaId}`,
       folder: "media",
     });
     const fileName = src.match(/.*\/(.*)$/)?.[0] ?? "untitled";
-    const uploadedMedia = new Media({
-      id: display_name,
+
+    await saveMediaToUser(res, user, {
+      id: mediaId,
       src: url,
-      fileName,
+      fileName: fileName,
     });
-    await uploadedMedia.save();
-    constructSucessResponse(res, { id: uploadedMedia.id, src: url });
+    await user!.save();
+    constructSucessResponse(res, { id: mediaId, src: url });
     next();
   } catch (err) {
     next(err);

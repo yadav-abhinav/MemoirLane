@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { IUser } from "../entity/user.entity";
 
@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
+  images: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Media",
+    },
+  ],
 });
 
 export const User = mongoose.model("User", userSchema);

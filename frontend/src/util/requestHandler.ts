@@ -1,40 +1,38 @@
 import axios, { HttpStatusCode, isAxiosError } from "axios";
 import ApiError from "./apiError";
-import { ErrorResponse, SuccessResponse } from "./types";
+import { ErrorResponse, RequestOptions, SuccessResponse } from "./types";
 import { toast } from "react-toastify";
 
 class RequestSender {
   host: string;
-
   constructor() {
     this.host = import.meta.env["VITE_BACKEND_ENDPOINT"];
   }
 
-  get<T>(route: string, headers = {}) {
-    return this.sendRequest<T>(route, "GET", {}, headers);
+  get<T>(route: string, options?: RequestOptions) {
+    return this.sendRequest<T>(route, "GET", options);
   }
 
-  post<T>(route: string, body = {}, headers = {}) {
-    return this.sendRequest<T>(route, "POST", body, headers);
+  post<T>(route: string, data?: object, options?: RequestOptions) {
+    return this.sendRequest<T>(route, "POST", { ...options, data });
   }
 
-  put<T>(route: string, body = {}, headers = {}) {
-    return this.sendRequest<T>(route, "PUT", body, headers);
+  put<T>(route: string, options?: RequestOptions) {
+    return this.sendRequest<T>(route, "PUT", options);
   }
 
-  patch<T>(route: string, body = {}, headers = {}) {
-    return this.sendRequest<T>(route, "PATCH", body, headers);
+  patch<T>(route: string, options?: RequestOptions | undefined) {
+    return this.sendRequest<T>(route, "PATCH", options);
   }
 
-  delete<T>(route: string, headers = {}) {
-    return this.sendRequest<T>(route, "DELETE", headers);
+  delete<T>(route: string, options?: RequestOptions | undefined) {
+    return this.sendRequest<T>(route, "DELETE", options);
   }
 
   private async sendRequest<T>(
     route: string,
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-    body = {},
-    headers = {}
+    options?: RequestOptions
   ): Promise<T> {
     const endpoint = this.host + `/${route}`;
     const token =
@@ -43,8 +41,8 @@ class RequestSender {
     try {
       const { data } = await axios<SuccessResponse<T>>(endpoint, {
         method: method,
-        data: body,
-        headers: { ...headers, Authorization: `Bearer ${token}` },
+        ...options,
+        headers: { ...options?.headers, Authorization: `Bearer ${token}` },
       });
       if (!data.success) throw new ApiError();
       return data.payload;
@@ -55,7 +53,7 @@ class RequestSender {
         err.response?.status == HttpStatusCode.Unauthorized
       ) {
         await this.refreshAccessToken();
-        return await this.sendRequest<T>(route, method, body, headers);
+        return await this.sendRequest<T>(route, method, options);
       } else if (isAxiosError<ErrorResponse>(err))
         msg = err.response?.data.error ?? msg;
       throw new ApiError(msg);
@@ -73,7 +71,10 @@ class RequestSender {
       } = await axios.get<SuccessResponse<{ accessToken: string }>>(
         refreshEndpoint
       );
-      sessionStorage.setItem("token", accessToken);
+      if (localStorage.getItem("token"))
+        localStorage.setItem("token", accessToken);
+      else sessionStorage.setItem("token", accessToken);
+
       if (!success) throw new Error();
     } catch (err) {
       toast.dismiss();

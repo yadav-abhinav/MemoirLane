@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Avatar,
   TextField,
@@ -44,10 +44,6 @@ export default function Login() {
     theme.palette.mode === "light"
       ? "rgba(17, 153, 158, 0.3)"
       : "rgba(38, 80, 115, 0.3)";
-
-  useEffect(() => {
-    if (expired) toast.error("You need to log in first!");
-  }, [redirect]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

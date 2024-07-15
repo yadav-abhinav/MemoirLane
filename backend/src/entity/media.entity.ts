@@ -3,5 +3,5 @@ export interface IMedia {
   src: string;
   fileName: string;
   caption?: string;
-  uploadedAt: Date;
+  uploadedAt?: Date;
 }

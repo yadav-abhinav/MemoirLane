@@ -50,3 +50,8 @@ export interface SuccessResponse<T> {
   timeStamp: Date;
 }
 
+export interface RequestOptions {
+  data?: object;
+  headers?: object;
+  params?: object;
+}

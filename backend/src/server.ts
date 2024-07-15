@@ -5,6 +5,7 @@ import connect from "./db/connection";
 import cookieParser from "cookie-parser";
 import logger from "./utils/logger";
 import verifyJWT from "./middleware/jwt";
+import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
 import mediaRoutes from "./routes/media.routes";
 import requestLogger from "./middleware/logger";
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(requestLogger);
 app.use("/media", verifyJWT, mediaRoutes);
+app.use("/user", verifyJWT, userRoutes);
 app.use(authRoutes);
 
 app.get("/", verifyJWT, (req, res) => {

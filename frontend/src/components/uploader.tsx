@@ -16,7 +16,11 @@ import { ChangeEvent, MouseEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import request from "../util/requestHandler";
 
-export default function Uploader() {
+export default function Uploader({
+  fetchImageData,
+}: {
+  fetchImageData: () => Promise<void>;
+}) {
   const [speedDialOpen, openSpeedDial] = useState(false);
   const [dialogOpen, openDialog] = useState(false);
   const inputFile = useRef<HTMLInputElement>(null);
@@ -32,10 +36,9 @@ export default function Uploader() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const src = formData.get("url");
-    toast.promise(
-      request.post("media/upload/link", { src }),
-      ...toastOptions(1)
-    );
+    toast
+      .promise(request.post("media/upload/url", { src }), ...toastOptions(1))
+      .then(() => fetchImageData());
     openDialog(false);
   };
 
@@ -55,10 +58,12 @@ export default function Uploader() {
       formData.append("media-upload", file);
     });
 
-    toast.promise(
-      request.post("media/upload/local", formData),
-      ...toastOptions(files.length)
-    );
+    toast
+      .promise(
+        request.post("media/upload/local", formData),
+        ...toastOptions(files.length)
+      )
+      .then(() => fetchImageData());
     event.target.value = "";
   };
 

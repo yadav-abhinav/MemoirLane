@@ -4,7 +4,6 @@ import DashPanel from "../components/dashpanel";
 import MediaContainer from "../components/mediaContainer";
 import { useState } from "react";
 import BottomPanel from "../components/bottomDashpanel";
-import Uploader from "../components/uploader";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState(0);
@@ -46,7 +45,6 @@ export default function Dashboard() {
           selected={selected}
           setSelected={setSelected}
         />
-        <Uploader />
       </Paper>
     </Container>
   );
