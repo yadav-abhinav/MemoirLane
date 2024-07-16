@@ -7,7 +7,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const token =
       localStorage.getItem("token") ?? sessionStorage.getItem("token");
     if (token?.length) return true;
-    return false;
+    return true;
   });
   const [user, setUser] = useState<JWTPayload>({ userId: "", email: "" });
 

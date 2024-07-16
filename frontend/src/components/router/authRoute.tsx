@@ -4,5 +4,5 @@ import { authContext } from "../../util/context";
 
 export default function AuthRoute({ element }: { element: ReactNode }) {
   const { isLoggedIn } = useContext(authContext);
-  return isLoggedIn ? <Navigate to={"/login"} replace /> : element;
+  return isLoggedIn ? <Navigate to={"/"} replace /> : element;
 }

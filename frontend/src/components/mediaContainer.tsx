@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 import ImageGrid from "./imageGrid";
 import { imageGridDimensions } from "../util/constants";
 import { MediaInfo, MediaTimelineMap } from "../util/types";
 import request from "../util/requestHandler";
 import Uploader from "./uploader";
+import MediaLoadError from "./loadError";
+import Empty from "./empty";
 
 function groupImageData(imageData: MediaInfo[]) {
   const groupedImageData: MediaTimelineMap = {};
@@ -31,13 +39,22 @@ function groupImageData(imageData: MediaInfo[]) {
 
 export default function MediaContainer() {
   const [imageData, setData] = useState<MediaTimelineMap>({});
+  const [error, setError] = useState<boolean>(false);
+  const [dataPresent, setDataPresent] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchImageData = async (page: number = 1) => {
-    console.log("fetchImageData called");
-    const data = await request.get<{ images: MediaInfo[] }>("user/media", {
-      params: { page },
-    });
-    setData(groupImageData(data.images));
+    try {
+      const data = await request.get<{ images: MediaInfo[] }>("user/media", {
+        params: { page },
+      });
+      if (!data.images.length) setDataPresent(false);
+      setData(groupImageData(data.images));
+    } catch (err) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // const getImageData = async () => {
@@ -47,19 +64,23 @@ export default function MediaContainer() {
   // };
 
   useEffect(() => {
-    console.log("useEffect called");
+    setLoading(true);
     (async () => {
       await fetchImageData();
     })();
   }, []);
 
+  if (error) return <MediaLoadError />;
+
   return (
     <>
       <Box
+        width="calc(100% + 2.4rem)"
         pl={{ md: "3.5rem", xs: "1.5rem" }}
         pt="2rem"
         position={{ md: "relative", xs: "static" }}
         left="-2.4rem"
+        overflow="visible"
         sx={{
           background: "inherit",
           borderRadius: "2.5rem",
@@ -69,54 +90,79 @@ export default function MediaContainer() {
           },
         }}
       >
-        {Object.keys(imageData)
-          .sort((a, b) => parseInt(b) - parseInt(a))
-          .map((month) => {
-            const date = new Date(parseInt(month));
-            const dateHeading = date.toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            });
-            return (
-              <Box key={month}>
-                <Typography variant="h4">{dateHeading}</Typography>
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  useFlexGap
-                  spacing={1}
-                  flexWrap="wrap"
-                  pb="3rem"
-                  pr="1.5rem"
-                  sx={{ columnGap: { md: "3.5rem" } }}
-                >
-                  {Object.keys(imageData[month])
-                    .sort((a, b) => parseInt(b) - parseInt(a))
-                    .map((day) => {
-                      const fullDate = new Date(date).setDate(parseInt(day));
-                      const dayHeading = new Date(fullDate).toLocaleDateString(
-                        "en-US",
-                        {
-                          weekday: "short",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      );
-                      return (
-                        <Box
-                          key={day}
-                          width={{ xs: "100%", md: "fit-content" }}
-                        >
-                          <Typography variant="button" color="text.secondary">
-                            {dayHeading}
-                          </Typography>
-                          <ImageGrid imageData={imageData[month][day]} />
-                        </Box>
-                      );
-                    })}
-                </Stack>
-              </Box>
-            );
-          })}
+        {loading ? (
+          <Container
+            maxWidth="xs"
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              pr: "2rem",
+            }}
+          >
+            <CircularProgress size={50} />
+          </Container>
+        ) : (
+          <>
+            {dataPresent ? (
+              Object.keys(imageData)
+                .sort((a, b) => parseInt(b) - parseInt(a))
+                .map((month) => {
+                  const date = new Date(parseInt(month));
+                  const dateHeading = date.toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  });
+                  return (
+                    <Box key={month}>
+                      <Typography variant="h4">{dateHeading}</Typography>
+                      <Stack
+                        direction={{ xs: "column", md: "row" }}
+                        useFlexGap
+                        spacing={1}
+                        flexWrap="wrap"
+                        pb="3rem"
+                        pr="1.5rem"
+                        sx={{ columnGap: { md: "3.5rem" } }}
+                      >
+                        {Object.keys(imageData[month])
+                          .sort((a, b) => parseInt(b) - parseInt(a))
+                          .map((day) => {
+                            const fullDate = new Date(date).setDate(
+                              parseInt(day)
+                            );
+                            const dayHeading = new Date(
+                              fullDate
+                            ).toLocaleDateString("en-US", {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                            });
+                            return (
+                              <Box
+                                key={day}
+                                width={{ xs: "100%", md: "fit-content" }}
+                              >
+                                <Typography
+                                  variant="button"
+                                  color="text.secondary"
+                                >
+                                  {dayHeading}
+                                </Typography>
+                                <ImageGrid imageData={imageData[month][day]} />
+                              </Box>
+                            );
+                          })}
+                      </Stack>
+                    </Box>
+                  );
+                })
+            ) : (
+              <Empty />
+            )}
+          </>
+        )}
       </Box>
       <Uploader fetchImageData={fetchImageData} />
     </>
