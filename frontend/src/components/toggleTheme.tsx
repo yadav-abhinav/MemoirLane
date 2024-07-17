@@ -1,8 +1,4 @@
-import {
-  BoxProps,
-  Switch,
-  styled,
-} from "@mui/material";
+import { Box, BoxProps, Switch, styled } from "@mui/material";
 import { themeContext } from "../util/context";
 import { useContext } from "react";
 
@@ -59,13 +55,14 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function ThemeToggler({ sx }: BoxProps) {
+export default function ThemeToggler({ display }: BoxProps) {
   const { mode, toggleColorMode } = useContext(themeContext);
   return (
-    <MaterialUISwitch
-      onChange={toggleColorMode}
-      defaultChecked={mode === "dark"}
-      sx={{ ...sx }}
-    />
+    <Box display={display}>
+      <MaterialUISwitch
+        onChange={toggleColorMode}
+        defaultChecked={mode === "dark"}
+      />
+    </Box>
   );
 }

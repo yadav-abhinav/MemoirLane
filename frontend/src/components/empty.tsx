@@ -24,12 +24,13 @@ export default function Empty() {
           textAlign="center"
           mt="2rem"
           mb="0.5rem"
-        >
-          Nothing to see here!
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Ready to add some photos?
-        </Typography>
+          children={"Nothing to see here!"}
+        />
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          children={"Ready to add some photos?"}
+        />
       </Box>
     </Container>
   );

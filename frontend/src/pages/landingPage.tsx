@@ -15,7 +15,7 @@ function LandingPage() {
       disableGutters
       sx={{
         background: `linear-gradient(90deg, ${bgColor}, transparent 40%), linear-gradient(270deg, ${bgColor}, transparent 50%)`,
-        minHeight: "100vh",
+        minHeight: "100svh",
         pb: "2rem",
       }}
     >

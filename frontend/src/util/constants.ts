@@ -1,45 +1,20 @@
 import { Feature } from "./types";
-import {
-  Link,
-  IosShare,
-  AutoFixHigh,
-  CollectionsBookmark,
-  FavoriteBorder,
-  CollectionsOutlined,
-  AddPhotoAlternateOutlined,
-  Share,
-  Info,
-  Star,
-  StarBorder,
-  Delete,
-  MoreHoriz,
-  Download,
-} from "@mui/icons-material";
-import {
-  PeopleOutlined,
-  PhotoOutlined,
-  Person4Outlined,
-  SettingsOutlined,
-  LogoutOutlined,
-  HomeOutlined,
-  TipsAndUpdatesOutlined,
-  GitHub,
-} from "@mui/icons-material";
+import * as Icon from "@mui/icons-material";
 import { Slide, ToastOptions, ToastPromiseParams } from "react-toastify";
 
 export const profileSettings = [
-  { title: "Profile", href: "/", Icon: Person4Outlined },
-  { title: "Settings", href: "/", Icon: SettingsOutlined },
-  { title: "Logout", href: "/logout", Icon: LogoutOutlined },
+  { title: "Profile", href: "/", Icon: Icon.Person4Outlined },
+  { title: "Settings", href: "/", Icon: Icon.SettingsOutlined },
+  { title: "Logout", href: "/logout", Icon: Icon.LogoutOutlined },
 ];
 
 export const navPages = [
-  { title: "Home", href: "/", Icon: HomeOutlined },
-  { title: "Features", href: "#", Icon: TipsAndUpdatesOutlined },
+  { title: "Home", href: "/", Icon: Icon.HomeOutlined },
+  { title: "Features", href: "#", Icon: Icon.TipsAndUpdatesOutlined },
   {
     title: "Github",
     href: "https://github.com/yadav-abhinav/MemoirLane.git",
-    Icon: GitHub,
+    Icon: Icon.GitHub,
   },
 ];
 
@@ -48,50 +23,50 @@ export const FeatureList: Feature[] = [
     title: "Photo Sharing",
     description:
       "Capture, share, and relive your favorite moments with our seamless photo sharing Feature. Easily upload your photos and add captions to preserve memories.",
-    Icon: IosShare,
+    Icon: Icon.IosShare,
   },
   {
     title: "Photo Editing",
     description:
       "Unleash your creativity with our powerful photo editing Feature. Enhance your images with a variety of tools, including filters, cropping and more, and special effects.",
-    Icon: AutoFixHigh,
+    Icon: Icon.AutoFixHigh,
   },
   {
     title: "Photo Album",
     description:
       "Organize and cherish your memories with our versatile photo album Feature. Create custom albums to categorize your photos and easily navigate your collection.",
-    Icon: CollectionsBookmark,
+    Icon: Icon.CollectionsBookmark,
   },
 ];
 
 export const dashPanelMenuList = [
-  { title: "Photos", href: "/", Icon: PhotoOutlined },
-  { title: "Shared", href: "#", Icon: PeopleOutlined },
-  { title: "Favourites", href: "/", Icon: FavoriteBorder },
-  { title: "Albums", href: "#", Icon: CollectionsOutlined },
+  { title: "Photos", href: "/", Icon: Icon.PhotoOutlined },
+  { title: "Shared", href: "#", Icon: Icon.PeopleOutlined },
+  { title: "Favourites", href: "/", Icon: Icon.FavoriteBorder },
+  { title: "Albums", href: "#", Icon: Icon.CollectionsOutlined },
 ];
 
 export const uploadActions = [
   {
     id: "local",
     title: "Local device",
-    Icon: AddPhotoAlternateOutlined,
+    Icon: Icon.AddPhotoAlternateOutlined,
   },
-  { id: "link", title: "Image link", Icon: Link },
-  { id: "album", title: "Album", Icon: CollectionsOutlined },
+  { id: "link", title: "Image link", Icon: Icon.Link },
+  { id: "album", title: "Album", Icon: Icon.CollectionsOutlined },
 ];
 
 export const mediaOptions = (favourite: boolean) => [
-  { title: "Share", Icon: Share },
-  { title: "Details", Icon: Info },
-  { title: "Favourite", Icon: favourite ? Star : StarBorder },
-  { title: "Delete", Icon: Delete },
-  { title: "Options", Icon: MoreHoriz },
-];
-
-export const mediaMoreOptions = [
-  { id: "download", title: "Download", Icon: Download },
-  { id: "album", title: "Add to Album", Icon: CollectionsOutlined },
+  {
+    id: "favourite",
+    title: "Favourite",
+    Icon: favourite ? Icon.Star : Icon.StarBorder,
+  },
+  { id: "share", title: "Share", Icon: Icon.Share },
+  { id: "details", title: "Details", Icon: Icon.Info },
+  { id: "delete", title: "Delete", Icon: Icon.Delete },
+  { id: "download", title: "Download", Icon: Icon.Download },
+  { id: "album", title: "Add to Album", Icon: Icon.CollectionsOutlined },
 ];
 
 export const toastOptions = (

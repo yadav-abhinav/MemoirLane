@@ -96,7 +96,7 @@ export default function Uploader({
             icon={<action.Icon />}
             tooltipTitle={action.title}
             onClick={handleClick}
-          ></SpeedDialAction>
+          />
         ))}
       </SpeedDial>
 
@@ -112,15 +112,18 @@ export default function Uploader({
           },
         }}
       >
-        <DialogTitle>Image Link</DialogTitle>
+        <DialogTitle children={"Image Link"} />
         <DialogContent>
+          <DialogContentText
+            children={
+              "Paste the public URL of the photo that you want to upload."
+            }
+          />
           <DialogContentText>
-            Paste the public URL of the photo that you want to upload.
-          </DialogContentText>
-          <DialogContentText>
-            <Typography variant="caption">
-              Please Ensure that the URL is public and valid.
-            </Typography>
+            <Typography
+              variant="caption"
+              children={"Please Ensure that the URL is public and valid."}
+            />
           </DialogContentText>
           <TextField
             autoFocus
@@ -137,16 +140,14 @@ export default function Uploader({
           <Button
             onClick={() => openDialog(false)}
             sx={{ borderRadius: "14px" }}
-          >
-            Cancel
-          </Button>
+            children={"Cancel"}
+          />
           <Button
             type="submit"
             variant="contained"
             sx={{ borderRadius: "14px" }}
-          >
-            Upload
-          </Button>
+            children={"Upload"}
+          />
         </DialogActions>
       </Dialog>
     </>

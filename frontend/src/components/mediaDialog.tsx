@@ -11,15 +11,17 @@ import {
   Paper,
   Stack,
   styled,
+  Theme,
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { Close } from "@mui/icons-material";
+import { Close, MoreHoriz } from "@mui/icons-material";
 import { Dispatch, SetStateAction, MouseEvent, useState } from "react";
 import { MediaInfo } from "../util/types";
-import { mediaMoreOptions, mediaOptions } from "../util/constants";
+import { mediaOptions } from "../util/constants";
 import MediaInfoDrawer from "./mediaInfoDrawer";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -42,6 +44,10 @@ export default function MediaDialog({
   setFavourite: () => void;
   media: MediaInfo;
 }) {
+  const match = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.between("xs", "md")
+  );
+  const breakId = match ? 2 : 4;
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -82,10 +88,6 @@ export default function MediaDialog({
       case "delete": {
         break;
       }
-      case "options": {
-        handleOpenMenu(event);
-        break;
-      }
     }
   };
 
@@ -120,46 +122,57 @@ export default function MediaDialog({
         sx={{ py: "0.5rem", position: "absolute", background: "transparent" }}
       >
         <Toolbar>
-          <IconButton edge="start" onClick={() => setOpen(false)}>
-            <Close />
-          </IconButton>
+          <IconButton
+            edge="start"
+            onClick={() => setOpen(false)}
+            children={<Close />}
+          />
           <Typography
             px="1rem"
             fontSize="1rem"
             variant="button"
             color="text.primary"
             flex={1}
-          >
-            {media.fileName}
-          </Typography>
+            children={media.fileName}
+          />
           <Stack gap="1rem" direction="row">
-            {mediaOptions(favourite).map((item) => (
-              <Tooltip key={item.title} title={item.title}>
-                <IconButton data-title={item.title} onClick={handleClick}>
-                  <item.Icon />
-                </IconButton>
-              </Tooltip>
-            ))}
+            {mediaOptions(favourite)
+              .slice(0, breakId)
+              .map((item) => (
+                <Tooltip key={item.title} title={item.title}>
+                  <IconButton
+                    data-title={item.title}
+                    onClick={handleClick}
+                    children={<item.Icon />}
+                  />
+                </Tooltip>
+              ))}
+            <IconButton
+              data-title={"Options"}
+              onClick={handleOpenMenu}
+              children={<MoreHoriz />}
+            />
           </Stack>
+
           <Menu
             anchorEl={anchorEl}
             open={menuOpen}
             onClose={() => setAnchorEl(null)}
           >
-            {mediaMoreOptions.map((item) => (
-              <Box key={item.title}>
-                <MenuItem
-                  data-option={item.title}
-                  onClick={handleMenuClick}
-                  sx={{ p: "1rem 2rem" }}
-                >
-                  <ListItemIcon>
-                    <item.Icon fontSize="small" />
-                  </ListItemIcon>
-                  {item.title}
-                </MenuItem>
-              </Box>
-            ))}
+            {mediaOptions(favourite)
+              .slice(breakId)
+              .map((item) => (
+                <Box key={item.title}>
+                  <MenuItem
+                    data-option={item.title}
+                    onClick={handleMenuClick}
+                    sx={{ p: "1rem 2rem" }}
+                  >
+                    <ListItemIcon children={<item.Icon fontSize="small" />} />
+                    {item.title}
+                  </MenuItem>
+                </Box>
+              ))}
           </Menu>
         </Toolbar>
       </AppBar>

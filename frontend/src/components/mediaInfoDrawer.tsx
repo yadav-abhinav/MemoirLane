@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { MediaInfo } from "../util/types";
 import { Dispatch, SetStateAction } from "react";
-import { Close } from "@mui/icons-material";
+import { AspectRatio, Close, InsertPhoto, Today } from "@mui/icons-material";
 
 export default function MediaInfoDrawer({
   open,
@@ -31,44 +31,57 @@ export default function MediaInfoDrawer({
       anchor="right"
       open={open}
       onClose={toggleDrawer(false)}
-      sx={{ zIndex: (theme) => theme.zIndex.modal + 999 }}
+      sx={{ zIndex: (theme) => theme.zIndex.modal + 1 }}
     >
-      <List>
-        <AppBar
-          elevation={0}
-          sx={{ py: "0.5rem", position: "relative", background: "transparent" }}
-        >
-          <Toolbar>
-            <IconButton edge="start" onClick={() => setOpen(false)}>
-              <Close />
-            </IconButton>
-            <Typography
-              px="1rem"
-              fontSize="1rem"
-              variant="button"
-              color="text.primary"
-              flex={1}
-            >
-              {media.fileName}
-            </Typography>
-          </Toolbar>
-        </AppBar>
+      <AppBar elevation={0} position="relative">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            onClick={() => setOpen(false)}
+            children={<Close />}
+          />
+          <Typography
+            px="1rem"
+            fontSize="1rem"
+            variant="button"
+            children={"Info"}
+          />
+        </Toolbar>
+      </AppBar>
+      <List sx={{ px: "1rem" }}>
         <ListSubheader
-          sx={{
-            color: "text.disabled",
-            bgcolor: "transparent",
-          }}
-        >
-          Details
-        </ListSubheader>
-        {Object.keys(media).map((key, id) => (
-          <ListItem key={id} disablePadding sx={{ color: "text.secondary" }}>
-            <ListItemIcon sx={{ pl: "1rem", color: "text.secondary" }}>
-              <Close />
-            </ListItemIcon>
-            <ListItemText primary={key} secondary={media[key]!.toString()} />
-          </ListItem>
-        ))}
+          sx={{ color: "text.disabled", background: "inherit" }}
+          children={"Details"}
+        />
+        <ListItem>
+          <ListItemIcon children={<Today />} />
+          <ListItemText
+            primary={"Created"}
+            secondary={media.uploadedAt.toLocaleDateString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            })}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon children={<AspectRatio />} />
+          <ListItemText
+            primary={"Size"}
+            secondary={media.size + " - " + media.height + " × " + media.width}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon children={<InsertPhoto />} />
+          <ListItemText
+            primary={"Name"}
+            secondary={media.fileName + "." + media.mimeType}
+          />
+        </ListItem>
       </List>
     </Drawer>
   );

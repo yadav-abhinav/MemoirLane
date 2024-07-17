@@ -3,6 +3,7 @@ import {
   Card,
   CardActionArea,
   IconButton,
+  Skeleton,
   styled,
 } from "@mui/material";
 import { MediaInfo } from "../util/types";
@@ -52,23 +53,22 @@ export default function Media({ image }: { image: MediaInfo }) {
           },
         }}
       >
-        {/* {loading && (
+        {loading && (
           <Skeleton
             variant="rounded"
             width="100%"
             height="100%"
             animation="wave"
           />
-        )} */}
+        )}
         <FavButton
           className="fav-button"
           disableFocusRipple
           onClick={handleFavouriteClick}
-        >
-          {starred ? <Star /> : <StarBorder />}
-        </FavButton>
+          children={starred ? <Star /> : <StarBorder />}
+        />
         <CardActionArea sx={{ height: "100%" }} onClick={() => setOpen(true)}>
-          <ImageOverlay className="image-overlay" />
+          <ImageOverlay />
           <img
             src={image.src}
             hidden={loading}

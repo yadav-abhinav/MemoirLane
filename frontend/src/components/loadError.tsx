@@ -31,9 +31,8 @@ export default function LoadError() {
           textAlign="center"
           mt="1.5rem"
           mb="0.5rem"
-        >
-          Oh snap!
-        </Typography>
+          children={"Oh snap!"}
+        />
         <Typography variant="body2" color="text.secondary">
           Something went wrong! Try
           <Link
@@ -43,9 +42,8 @@ export default function LoadError() {
             onClick={() => {
               window.location.reload();
             }}
-          >
-            reloading
-          </Link>
+            children={"reloading"}
+          />
           this webpage.
         </Typography>
       </Box>

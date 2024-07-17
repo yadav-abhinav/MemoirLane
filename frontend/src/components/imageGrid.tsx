@@ -2,13 +2,14 @@ import {
   Box,
   ImageList,
   ImageListItem,
+  Theme,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { IMAGE_BASE_WIDTH, imageGridDimensions } from "../util/constants";
 import { MediaInfo } from "../util/types";
 import Media from "./media";
 
+const GAP = 3;
 const getDimensions = (imageData: MediaInfo[]) => {
   const len = imageData.length;
   const maxCols = imageGridDimensions.reduce(
@@ -20,32 +21,31 @@ const getDimensions = (imageData: MediaInfo[]) => {
 
 export default function ImageGrid({ imageData }: { imageData: MediaInfo[] }) {
   const maxCols = getDimensions(imageData);
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.between("xs", "md"));
+  const matches = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.between("xs", "md")
+  );
 
   return (
     <Box sx={{ overflow: "auto" }}>
       <ImageList
         variant="quilted"
-        gap={3}
+        gap={GAP}
         cols={maxCols}
         rowHeight={IMAGE_BASE_WIDTH}
         sx={{ width: "fit-content" }}
       >
         {imageData.map((image, i) => {
           const imageCols = matches ? 1 : image.cols!;
+          const imageWidth =
+            imageCols * IMAGE_BASE_WIDTH + (imageCols - 1) * GAP;
           return (
             <ImageListItem
               key={i}
               cols={imageCols}
               rows={image.rows}
-              sx={{
-                width: imageCols * IMAGE_BASE_WIDTH,
-                overflow: "hidden",
-              }}
-            >
-              <Media image={image} />
-            </ImageListItem>
+              sx={{ width: imageWidth, overflow: "hidden" }}
+              children={<Media image={image} />}
+            />
           );
         })}
       </ImageList>

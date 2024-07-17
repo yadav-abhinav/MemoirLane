@@ -33,10 +33,14 @@ export type JWTPayload = {
 export type MediaInfo = {
   id: string;
   src: string;
+  size: string;
+  width: number;
+  height: number;
+  mimeType: number;
   fileName: string;
-  favourite?: boolean;
   caption?: string;
   uploadedAt: Date;
+  favourite?: boolean;
   rows?: number;
   cols?: number;
   [key: string]: string | boolean | number | Date | undefined;

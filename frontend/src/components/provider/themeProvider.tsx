@@ -18,9 +18,10 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
 
   return (
     <ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
-      <themeContext.Provider value={{ mode, toggleColorMode }}>
-        {children}
-      </themeContext.Provider>
+      <themeContext.Provider
+        value={{ mode, toggleColorMode }}
+        children={children}
+      />
     </ThemeProvider>
   );
 }

@@ -3,9 +3,19 @@ import {
   BottomNavigationAction,
   BoxProps,
   Paper,
+  styled,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { dashPanelMenuList } from "../util/constants";
+
+const StyledPaper = styled(Paper)({
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  borderRadius: "10px 10px 0 0",
+  padding: "0.5rem 0",
+});
 
 export default function BottomPanel({
   display,
@@ -16,18 +26,7 @@ export default function BottomPanel({
   setSelected: Dispatch<SetStateAction<number>>;
 }) {
   return (
-    <Paper
-      sx={{
-        display,
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        borderRadius: "10px 10px 0 0",
-        py: "0.5rem",
-      }}
-      elevation={3}
-    >
+    <StyledPaper sx={{ display }} elevation={3}>
       <BottomNavigation
         showLabels
         value={selected}
@@ -48,6 +47,6 @@ export default function BottomPanel({
           />
         ))}
       </BottomNavigation>
-    </Paper>
+    </StyledPaper>
   );
 }

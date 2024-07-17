@@ -7,7 +7,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const token =
       localStorage.getItem("token") ?? sessionStorage.getItem("token");
     if (token?.length) return true;
-    return true;
+    return false;
   });
   const [user, setUser] = useState<JWTPayload>({ userId: "", email: "" });
 
@@ -27,8 +27,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [isLoggedIn]);
 
   return (
-    <authContext.Provider value={{ user, isLoggedIn, setLoggedIn }}>
-      {children}
-    </authContext.Provider>
+    <authContext.Provider
+      value={{ user, isLoggedIn, setLoggedIn }}
+      children={children}
+    />
   );
 }

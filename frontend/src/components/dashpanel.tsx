@@ -8,10 +8,22 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  styled,
 } from "@mui/material";
 import { dashPanelMenuList, profileSettings } from "../util/constants";
 import { darkTheme } from "../util/theme";
 import { Dispatch, SetStateAction } from "react";
+
+const StyledBox = styled(Box)({
+  backgroundColor: "rgb(38, 80, 115)",
+  minWidth: "18.5rem",
+  paddingTop: "2rem",
+  borderRadius: "2.5rem 0 0 2.5rem",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+  overflowY: "auto",
+});
 
 export default function DashPanel({
   display,
@@ -22,28 +34,15 @@ export default function DashPanel({
   setSelected: Dispatch<SetStateAction<number>>;
 }) {
   return (
-    <Box
-      sx={{
-        display,
-        bgcolor: "rgb(38, 80, 115)",
-        minWidth: "18.5rem",
-        pt: "2rem",
-        borderRadius: "2.5rem 0 0 2.5rem",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-        overflowY: "auto",
-      }}
-    >
+    <StyledBox display={display}>
       <List>
         <ListSubheader
           sx={{
             color: darkTheme.palette.text.disabled,
             bgcolor: "transparent",
           }}
-        >
-          Library
-        </ListSubheader>
+          children={"Library"}
+        />
         {dashPanelMenuList.map((item, id) => (
           <ListItem
             key={id}
@@ -61,9 +60,8 @@ export default function DashPanel({
             >
               <ListItemIcon
                 sx={{ pl: "1rem", color: darkTheme.palette.text.secondary }}
-              >
-                <item.Icon />
-              </ListItemIcon>
+                children={<item.Icon />}
+              />
               <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
@@ -87,14 +85,13 @@ export default function DashPanel({
             <ListItemButton>
               <ListItemIcon
                 sx={{ pl: "1rem", color: darkTheme.palette.text.secondary }}
-              >
-                <item.Icon />
-              </ListItemIcon>
+                children={<item.Icon />}
+              />
               <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-    </Box>
+    </StyledBox>
   );
 }

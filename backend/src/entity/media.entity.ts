@@ -5,3 +5,5 @@ export interface IMedia {
   caption?: string;
   uploadedAt?: Date;
 }
+
+// TODO: add size, height, width, mimetype, favourite

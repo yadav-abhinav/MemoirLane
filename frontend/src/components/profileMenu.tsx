@@ -8,16 +8,29 @@ import {
   Box,
   BoxProps,
   ListItemIcon,
+  styled,
+  Button,
 } from "@mui/material";
 import { useState, MouseEvent, useContext } from "react";
 import { profileSettings } from "../util/constants";
 import { authContext } from "../util/context";
 import { useNavigate } from "react-router-dom";
+import { Login } from "@mui/icons-material";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? "rgba(64, 81, 78, 0.2)"
+      : "rgba(64, 81, 78, 0.6)",
+  borderRadius: "20px",
+}));
 
 export default function ProfileMenu(props: BoxProps) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { user } = useContext(authContext);
+  const { isLoggedIn, user } = useContext(authContext);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -32,18 +45,7 @@ export default function ProfileMenu(props: BoxProps) {
   };
 
   return (
-    <Box
-      {...props}
-      display="flex"
-      alignItems="center"
-      sx={{
-        bgcolor:
-          theme.palette.mode === "light"
-            ? "rgba(64, 81, 78, 0.2)"
-            : "rgba(64, 81, 78, 0.6)",
-        borderRadius: "20px",
-      }}
-    >
+    <StyledBox {...props}>
       <IconButton
         disableTouchRipple
         onClick={handleOpenUserMenu}
@@ -52,10 +54,11 @@ export default function ProfileMenu(props: BoxProps) {
         <Avatar
           src="/static/images/avatar/2.jpg"
           sx={{
-            bgcolor: theme.palette.mode === "light" ? "#11999E" : "#52D3D8",
+            bgcolor: theme.palette.primary.main,
             height: "38px",
             width: "38px",
           }}
+          children={<Login />}
         />
         <Typography
           display={{ md: "block", xs: "none" }}
@@ -63,9 +66,8 @@ export default function ProfileMenu(props: BoxProps) {
           fontWeight={500}
           color="text.primary"
           m="0.1rem 1rem 0 0.5rem"
-        >
-          Hello {user.email}!
-        </Typography>
+          children={`Hello ${user.email}!`}
+        />
       </IconButton>
       <Menu
         sx={{ mt: "45px" }}
@@ -83,21 +85,39 @@ export default function ProfileMenu(props: BoxProps) {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {profileSettings.map((setting) => (
-          <MenuItem
-            data-href={setting.href}
-            key={setting.title}
-            onClick={handleCloseUserMenu}
-          >
-            <ListItemIcon>
-              <setting.Icon />
-            </ListItemIcon>
-            <Typography textAlign="center" color="text.secondary">
-              {setting.title}
-            </Typography>
+        {isLoggedIn ? (
+          profileSettings.map((setting) => (
+            <MenuItem
+              data-href={setting.href}
+              key={setting.title}
+              onClick={handleCloseUserMenu}
+            >
+              <ListItemIcon children={<setting.Icon />} />
+              <Typography
+                textAlign="center"
+                color="text.secondary"
+                children={setting.title}
+              />
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disableRipple>
+            <Box mb="0.5rem" display="flex" flexDirection="column">
+              <Button
+                href="/signup"
+                sx={{ borderRadius: "14px" }}
+                children={"Sign Up"}
+              />
+              <Button
+                href="/login"
+                variant="contained"
+                sx={{ borderRadius: "14px" }}
+                children={"Sign In"}
+              />
+            </Box>
           </MenuItem>
-        ))}
+        )}
       </Menu>
-    </Box>
+    </StyledBox>
   );
 }

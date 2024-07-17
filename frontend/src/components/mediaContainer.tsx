@@ -4,6 +4,7 @@ import {
   CircularProgress,
   Container,
   Stack,
+  styled,
   Typography,
 } from "@mui/material";
 import ImageGrid from "./imageGrid";
@@ -13,6 +14,18 @@ import request from "../util/requestHandler";
 import Uploader from "./uploader";
 import MediaLoadError from "./loadError";
 import Empty from "./empty";
+
+const StyledBox = styled(Box)({
+  width: "calc(100% + 2.4rem)",
+  paddingTop: "2rem",
+  left: "-2.4rem",
+  background: "inherit",
+  borderRadius: "2.5rem",
+  overflowY: "scroll",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+});
 
 function groupImageData(imageData: MediaInfo[]) {
   const groupedImageData: MediaTimelineMap = {};
@@ -76,29 +89,16 @@ export default function MediaContainer() {
 
   useEffect(() => {
     setLoading(true);
-    (async () => {
-      await fetchImageData();
-    })();
+    fetchImageData();
   }, []);
 
   if (error) return <MediaLoadError />;
 
   return (
     <>
-      <Box
-        width="calc(100% + 2.4rem)"
+      <StyledBox
         pl={{ md: "3.5rem", xs: "1.5rem" }}
-        pt="2rem"
         position={{ md: "relative", xs: "static" }}
-        left="-2.4rem"
-        sx={{
-          background: "inherit",
-          borderRadius: "2.5rem",
-          overflowY: "scroll",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
       >
         {loading ? (
           <Container
@@ -130,11 +130,10 @@ export default function MediaContainer() {
                       <Stack
                         direction={{ xs: "column", md: "row" }}
                         useFlexGap
-                        spacing={1}
                         flexWrap="wrap"
                         pb="3rem"
                         pr="1.5rem"
-                        sx={{ columnGap: { md: "3.5rem" } }}
+                        sx={{ columnGap: { md: "3.6rem" } }}
                       >
                         {Object.keys(imageData[month])
                           .sort((a, b) => parseInt(b) - parseInt(a))
@@ -157,9 +156,8 @@ export default function MediaContainer() {
                                 <Typography
                                   variant="button"
                                   color="text.secondary"
-                                >
-                                  {dayHeading}
-                                </Typography>
+                                  children={dayHeading}
+                                />
                                 <ImageGrid imageData={imageData[month][day]} />
                               </Box>
                             );
@@ -173,7 +171,7 @@ export default function MediaContainer() {
             )}
           </>
         )}
-      </Box>
+      </StyledBox>
       <Uploader fetchImageData={fetchImageData} />
     </>
   );
