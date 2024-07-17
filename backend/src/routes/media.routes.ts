@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/upload/local", upload.array("media-upload"), uploadMediaLocal);
 router.post("/upload/url", uploadMediaLink);
-// router.post("/upload/album", upload.array("media-upload"), uploadMedia);
+// TODO: router.post("/upload/album", upload.array("media-upload"), uploadMedia);
+// TODO: Add favourite
 
 export default router;

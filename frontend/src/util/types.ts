@@ -34,10 +34,12 @@ export type MediaInfo = {
   id: string;
   src: string;
   fileName: string;
+  favourite?: boolean;
   caption?: string;
   uploadedAt: Date;
   rows?: number;
   cols?: number;
+  [key: string]: string | boolean | number | Date | undefined;
 };
 
 export type MediaTimelineMap = {

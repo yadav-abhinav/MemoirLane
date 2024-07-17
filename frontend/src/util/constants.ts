@@ -7,6 +7,13 @@ import {
   FavoriteBorder,
   CollectionsOutlined,
   AddPhotoAlternateOutlined,
+  Share,
+  Info,
+  Star,
+  StarBorder,
+  Delete,
+  MoreHoriz,
+  Download,
 } from "@mui/icons-material";
 import {
   PeopleOutlined,
@@ -68,11 +75,23 @@ export const uploadActions = [
   {
     id: "local",
     title: "Local device",
-    href: "/",
     Icon: AddPhotoAlternateOutlined,
   },
-  { id: "link", title: "Image link", href: "/", Icon: Link },
-  { id: "album", title: "Album", href: "#", Icon: CollectionsOutlined },
+  { id: "link", title: "Image link", Icon: Link },
+  { id: "album", title: "Album", Icon: CollectionsOutlined },
+];
+
+export const mediaOptions = (favourite: boolean) => [
+  { title: "Share", Icon: Share },
+  { title: "Details", Icon: Info },
+  { title: "Favourite", Icon: favourite ? Star : StarBorder },
+  { title: "Delete", Icon: Delete },
+  { title: "Options", Icon: MoreHoriz },
+];
+
+export const mediaMoreOptions = [
+  { id: "download", title: "Download", Icon: Download },
+  { id: "album", title: "Add to Album", Icon: CollectionsOutlined },
 ];
 
 export const toastOptions = (

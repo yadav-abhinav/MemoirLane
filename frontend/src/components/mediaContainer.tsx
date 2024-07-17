@@ -17,16 +17,12 @@ import Empty from "./empty";
 function groupImageData(imageData: MediaInfo[]) {
   const groupedImageData: MediaTimelineMap = {};
   imageData.forEach((item) => {
-    // const randomDate = new Date();
-    // randomDate.setDate(Math.floor(Math.random() * 7 + 1));
-    // randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
-    // item.uploadedAt = randomDate;
-    // item.src = item.download_url;
     const uploadedAt = new Date(item.uploadedAt);
-    const year = uploadedAt.getFullYear();
-    const month = uploadedAt.getMonth();
     const day = uploadedAt.getDate();
-    const date = new Date(0).setFullYear(year, month);
+    const date = new Date(0).setFullYear(
+      uploadedAt.getFullYear(),
+      uploadedAt.getMonth()
+    );
     if (!groupedImageData[date]) groupedImageData[date] = {};
     if (!groupedImageData[date][day]) groupedImageData[date][day] = [];
     const len = groupedImageData[date][day].length;
@@ -43,25 +39,40 @@ export default function MediaContainer() {
   const [dataPresent, setDataPresent] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchImageData = async (page: number = 1) => {
+  // const fetchImageData = async (page: number = 1) => {
+  //   try {
+  //     const data = await request.get<{ images: MediaInfo[] }>("user/media", {
+  //       params: { page },
+  //     });
+  //     if (!data.images.length) setDataPresent(false);
+  //     setData(groupImageData(data.images));
+  //   } catch (err) {
+  //     setError(true);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchImageData = async () => {
     try {
-      const data = await request.get<{ images: MediaInfo[] }>("user/media", {
-        params: { page },
+      const res = await fetch("https://picsum.photos/v2/list?page=1&limit=30");
+      const data = await res.json();
+      data.forEach((item: MediaInfo) => {
+        const randomDate = new Date();
+        randomDate.setDate(Math.floor(Math.random() * 7 + 1));
+        randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
+        item.uploadedAt = randomDate;
+        item.src = item.download_url;
+        item.fileName = "untitled";
       });
-      if (!data.images.length) setDataPresent(false);
-      setData(groupImageData(data.images));
+      if (!data.length) setDataPresent(false);
+      setData(groupImageData(data));
     } catch (err) {
       setError(true);
     } finally {
       setLoading(false);
     }
   };
-
-  // const getImageData = async () => {
-  //   const res = await fetch("https://picsum.photos/v2/list?page=1&limit=30");
-  //   const data = await res.json();
-  //   setData(groupImageData(data));
-  // };
 
   useEffect(() => {
     setLoading(true);
@@ -80,7 +91,6 @@ export default function MediaContainer() {
         pt="2rem"
         position={{ md: "relative", xs: "static" }}
         left="-2.4rem"
-        overflow="visible"
         sx={{
           background: "inherit",
           borderRadius: "2.5rem",
