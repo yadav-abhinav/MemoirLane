@@ -55,7 +55,7 @@ export default function Login() {
         {
           email: fromData.get("email"),
           password: fromData.get("password"),
-        }
+        },
       );
 
       const storage: Storage =
@@ -90,12 +90,7 @@ export default function Login() {
       <Container
         component="main"
         maxWidth="xs"
-        sx={{
-          paddingTop: {
-            xs: "8rem",
-            md: "10rem",
-          },
-        }}
+        sx={{ pt: { xs: "8rem", md: "10rem" } }}
         disableGutters
       >
         <Paper
@@ -108,18 +103,12 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-            <LoginIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ my: 3 }}
-          >
+          <Avatar
+            sx={{ m: 1, bgcolor: "primary.main" }}
+            children={<LoginIcon />}
+          />
+          <Typography component="h1" variant="h5" children={"Login"} />
+          <Box component="form" noValidate onSubmit={handleSubmit} my={3}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -145,9 +134,10 @@ export default function Login() {
                           onClick={handleClickShowPassword}
                           // onMouseDown={handleMouseDownPassword}
                           edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
+                          children={
+                            showPassword ? <VisibilityOff /> : <Visibility />
+                          }
+                        />
                       </InputAdornment>
                     }
                     label="Password"
@@ -168,9 +158,7 @@ export default function Login() {
                 />
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <Link href="#" variant="body2" children={"Forgot password?"} />
               </Grid>
             </Grid>
             <LoadingButton
@@ -180,35 +168,38 @@ export default function Login() {
               size="large"
               variant="contained"
               sx={{ mt: 1.5, mb: 2 }}
-            >
-              <span>Login</span>
-            </LoadingButton>
+              children={<span>Login</span>}
+            />
           </Box>
           <Divider flexItem>OR</Divider>
 
           <Stack direction="row" spacing={5} mt={2}>
-            <IconButton sx={{ border: "2px solid red" }}>
-              <Google color="error" />
-            </IconButton>
-            <IconButton sx={{ border: "2px solid #1877F2", color: "#1877F2" }}>
-              <Facebook />
-            </IconButton>
+            <IconButton
+              sx={{ border: "2px solid red" }}
+              children={<Google color="error" />}
+            />
+            <IconButton
+              sx={{ border: "2px solid #1877F2", color: "#1877F2" }}
+              children={<Facebook />}
+            />
             <IconButton
               sx={{
                 border: `2px solid ${
                   theme.palette.mode === "light" ? "#707070" : "white"
                 }`,
               }}
-            >
-              <GitHub />
-            </IconButton>
+              children={<GitHub />}
+            />
           </Stack>
 
           <Typography variant="body2" sx={{ mt: "1.5rem" }}>
             Don't have an account?
-            <Link href="\signup" variant="body2" sx={{ ml: "0.5rem" }}>
-              Sign up
-            </Link>
+            <Link
+              href="\signup"
+              variant="body2"
+              sx={{ ml: "0.5rem" }}
+              children={"Sign up"}
+            />
           </Typography>
         </Paper>
       </Container>

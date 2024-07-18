@@ -79,21 +79,15 @@ export default function SignUp() {
       sx={{
         // background: `radial-gradient(circle at 50%, ${bgColor}, transparent 150%)`,
         background: `radial-gradient(circle at 50%, transparent, ${bgColor} 80%)`,
-        minHeight: "100vh",
+        minHeight: "100svh",
         pb: "1rem",
       }}
     >
       <Container
         component="main"
         maxWidth="xs"
-        sx={{
-          paddingTop: {
-            xs: "6rem",
-            md: "10rem",
-          },
-          background: "radial-gradient",
-        }}
         disableGutters
+        sx={{ pt: { xs: "6rem", md: "10rem" } }}
       >
         <Paper
           elevation={12}
@@ -105,12 +99,11 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-            <LockOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign Up
-          </Typography>
+          <Avatar
+            sx={{ m: 1, bgcolor: "primary.main" }}
+            children={<LockOutlined />}
+          />
+          <Typography component="h1" variant="h5" children={"Sign Up"} />
           <Box
             component="form"
             // noValidate
@@ -150,7 +143,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth required>
-                  <InputLabel>Create a password</InputLabel>
+                  <InputLabel children={"Create a password"} />
                   <OutlinedInput
                     id="password"
                     name="password"
@@ -162,9 +155,10 @@ export default function SignUp() {
                           onClick={handleClickShowPassword}
                           // onMouseDown={handleMouseDownPassword}
                           edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
+                          children={
+                            showPassword ? <VisibilityOff /> : <Visibility />
+                          }
+                        />
                       </InputAdornment>
                     }
                     label="Create a password"
@@ -184,35 +178,38 @@ export default function SignUp() {
               size="large"
               variant="contained"
               sx={{ mt: 1.5, mb: 2 }}
-            >
-              <span>Sign Up</span>
-            </LoadingButton>
+              children={<span>Sign Up</span>}
+            />
           </Box>
           <Divider flexItem>OR</Divider>
 
           <Stack direction="row" spacing={5} mt={2}>
-            <IconButton sx={{ border: "2px solid red" }}>
-              <Google color="error" />
-            </IconButton>
-            <IconButton sx={{ border: "2px solid #1877F2", color: "#1877F2" }}>
-              <Facebook />
-            </IconButton>
+            <IconButton
+              sx={{ border: "2px solid red" }}
+              children={<Google color="error" />}
+            />
+            <IconButton
+              sx={{ border: "2px solid #1877F2", color: "#1877F2" }}
+              children={<Facebook />}
+            />
             <IconButton
               sx={{
                 border: `2px solid ${
                   theme.palette.mode === "light" ? "#707070" : "white"
                 }`,
               }}
-            >
-              <GitHub />
-            </IconButton>
+              children={<GitHub />}
+            />
           </Stack>
 
           <Typography variant="body2" sx={{ mt: "1.5rem" }}>
             Already have an account?
-            <Link href="\login" variant="body2" sx={{ ml: "0.5rem" }}>
-              Login
-            </Link>
+            <Link
+              href="\login"
+              variant="body2"
+              sx={{ ml: "0.5rem" }}
+              children={"Login"}
+            />
           </Typography>
         </Paper>
       </Container>
