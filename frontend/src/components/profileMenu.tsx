@@ -15,7 +15,7 @@ import { useState, MouseEvent, useContext } from "react";
 import { profileSettings } from "../util/constants";
 import { authContext } from "../util/context";
 import { useNavigate } from "react-router-dom";
-import { Login } from "@mui/icons-material";
+import { Face, Login } from "@mui/icons-material";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -58,7 +58,7 @@ export default function ProfileMenu(props: BoxProps) {
             height: "38px",
             width: "38px",
           }}
-          children={<Login />}
+          children={isLoggedIn ? <Face /> : <Login />}
         />
         <Typography
           display={{ md: "block", xs: "none" }}

@@ -70,13 +70,14 @@ export const mediaOptions = (favourite: boolean) => [
 ];
 
 export const toastOptions = (
-  itemSize: number
+  itemSize: number = 1,
+  operation = "Upload"
 ): [ToastPromiseParams, ToastOptions] => {
   return [
     {
-      pending: `Uploading ${itemSize} item(s)`,
-      success: "Image(s) uploaded successfully",
-      error: "Error uploading image(s)",
+      pending: `${operation}ing ${itemSize} item(s)`,
+      success: `Image(s) ${operation}ed successfully`,
+      error: `Error ${operation}ing image(s)`,
     },
     { position: "bottom-left", transition: Slide },
   ];

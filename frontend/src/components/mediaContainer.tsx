@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ImageGrid from "./imageGrid";
 import { imageGridDimensions } from "../util/constants";
-import { MediaInfo, MediaTimelineMap } from "../util/types";
+import { Media, MediaTimelineMap } from "../util/types";
 import request from "../util/requestHandler";
 import Uploader from "./uploader";
 import MediaLoadError from "./loadError";
@@ -27,7 +27,7 @@ const StyledBox = styled(Box)({
   },
 });
 
-function groupImageData(imageData: MediaInfo[]) {
+function groupImageData(imageData: Media[]) {
   const groupedImageData: MediaTimelineMap = {};
   imageData.forEach((item) => {
     const uploadedAt = new Date(item.uploadedAt);
@@ -53,8 +53,9 @@ export default function MediaContainer() {
   const [loading, setLoading] = useState<boolean>(false);
 
   // const fetchImageData = async (page: number = 1) => {
+  //    setLoading(true);
   //   try {
-  //     const data = await request.get<{ images: MediaInfo[] }>("user/media", {
+  //     const data = await request.get<{ images: Media[] }>("user/media", {
   //       params: { page },
   //     });
   //     if (!data.images.length) setDataPresent(false);
@@ -67,10 +68,11 @@ export default function MediaContainer() {
   // };
 
   const fetchImageData = async () => {
+    setLoading(true);
     try {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=30");
       const data = await res.json();
-      data.forEach((item: MediaInfo) => {
+      data.forEach((item: Media) => {
         const randomDate = new Date();
         randomDate.setDate(Math.floor(Math.random() * 7 + 1));
         randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
@@ -88,9 +90,8 @@ export default function MediaContainer() {
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchImageData();
-  }, []);
+  }, [imageData]);
 
   if (error) return <MediaLoadError />;
 

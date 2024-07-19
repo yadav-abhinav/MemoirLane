@@ -6,10 +6,12 @@ import {
   Skeleton,
   styled,
 } from "@mui/material";
-import { MediaInfo } from "../util/types";
+import { Media as MediaType } from "../util/types";
 import { useState } from "react";
 import { Star, StarBorder } from "@mui/icons-material";
 import MediaDialog from "./mediaDialog";
+import request from "../util/requestHandler";
+import { toast } from "react-toastify";
 
 const ImageOverlay = styled(Box)({
   position: "absolute",
@@ -32,13 +34,18 @@ const FavButton = styled(IconButton)({
   opacity: 0,
 });
 
-export default function Media({ image }: { image: MediaInfo }) {
+export default function Media({ media }: { media: MediaType }) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [starred, setStarred] = useState<boolean>(!!image.favrite);
+  const [starred, setStarred] = useState<boolean>(!!media.favourite);
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleFavouriteClick = () => {
+  const handleFavouriteClick = async () => {
     setStarred((prev) => !prev);
+    try {
+      await request.patch(`media/${media.id}/favourite`);
+    } catch {
+      toast.error("Error adding image to favourites!");
+    }
   };
 
   return (
@@ -70,9 +77,8 @@ export default function Media({ image }: { image: MediaInfo }) {
         <CardActionArea sx={{ height: "100%" }} onClick={() => setOpen(true)}>
           <ImageOverlay />
           <img
-            src={image.src}
+            src={media.src}
             hidden={loading}
-            alt={image.caption}
             loading="lazy"
             style={{
               objectFit: "cover",
@@ -88,7 +94,7 @@ export default function Media({ image }: { image: MediaInfo }) {
         setOpen={setOpen}
         favourite={starred}
         setFavourite={handleFavouriteClick}
-        media={image}
+        id={media.id}
       />
     </>
   );

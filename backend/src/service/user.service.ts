@@ -16,6 +16,7 @@ export async function getUserMedia(
     const user = await User.findOne({ id: req.userId }).populate({
       path: "images",
       options: { skip, limit: 20 },
+      select: "id, src, fileName, favourite, uploadedAt",
     });
     if (!user) {
       res.redirect("/logout");

@@ -81,10 +81,11 @@ export async function logoutUser(
 ) {
   try {
     await UserSesion.findOneAndDelete({ userId: req.userId });
-    res.clearCookie("rtoken", { httpOnly: true, secure: true });
     constructSucessResponse(res);
   } catch (err) {
     next(err);
+  } finally {
+    res.clearCookie("rtoken", { httpOnly: true, secure: true });
   }
 }
 

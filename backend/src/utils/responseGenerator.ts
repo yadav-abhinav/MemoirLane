@@ -15,12 +15,11 @@ export function constructErrorResponse(
 
 export function constructSucessResponse(
   res: Response,
-  payload: object = {},
+  payload?: object,
   code: number = StatusCodes.OK
 ) {
-  res.status(code).json({
-    success: true,
-    payload,
-    timeStamp: new Date().toISOString(),
-  });
+  const response = { success: true, timeStamp: new Date().toISOString() };
+  if (payload && Object.keys(payload).length)
+    Object.assign(response, { payload });
+  res.status(code).json(response);
 }

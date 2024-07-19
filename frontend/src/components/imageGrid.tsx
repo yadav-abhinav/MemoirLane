@@ -6,11 +6,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { IMAGE_BASE_WIDTH, imageGridDimensions } from "../util/constants";
-import { MediaInfo } from "../util/types";
+import { Media as MediaType } from "../util/types";
 import Media from "./media";
 
 const GAP = 3;
-const getDimensions = (imageData: MediaInfo[]) => {
+const getDimensions = (imageData: MediaType[]) => {
   const len = imageData.length;
   const maxCols = imageGridDimensions.reduce(
     (accumulator, val, i) => (i < len ? accumulator + val[1] : accumulator),
@@ -19,7 +19,7 @@ const getDimensions = (imageData: MediaInfo[]) => {
   return Math.min(10, maxCols);
 };
 
-export default function ImageGrid({ imageData }: { imageData: MediaInfo[] }) {
+export default function ImageGrid({ imageData }: { imageData: MediaType[] }) {
   const maxCols = getDimensions(imageData);
   const matches = useMediaQuery((theme: Theme) =>
     theme.breakpoints.between("xs", "md")
@@ -44,7 +44,7 @@ export default function ImageGrid({ imageData }: { imageData: MediaInfo[] }) {
               cols={imageCols}
               rows={image.rows}
               sx={{ width: imageWidth, overflow: "hidden" }}
-              children={<Media image={image} />}
+              children={<Media media={image} />}
             />
           );
         })}

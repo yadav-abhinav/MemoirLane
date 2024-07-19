@@ -37,7 +37,7 @@ export default function Uploader({
     const formData = new FormData(event.currentTarget);
     const src = formData.get("url");
     toast
-      .promise(request.post("media/upload/url", { src }), ...toastOptions(1))
+      .promise(request.post("media/upload/url", { src }), ...toastOptions())
       .then(() => fetchImageData());
     openDialog(false);
   };
@@ -57,13 +57,13 @@ export default function Uploader({
       }
       formData.append("media-upload", file);
     });
-
     toast
       .promise(
         request.post("media/upload/local", formData),
         ...toastOptions(files.length)
       )
-      .then(() => fetchImageData());
+      .then(() => fetchImageData())
+      .catch(() => {});
     event.target.value = "";
   };
 

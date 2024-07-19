@@ -11,17 +11,17 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { MediaInfo } from "../util/types";
+import { Media } from "../util/types";
 import { Dispatch, SetStateAction } from "react";
 import { AspectRatio, Close, InsertPhoto, Today } from "@mui/icons-material";
 
-export default function MediaInfoDrawer({
+export default function MediaDrawer({
   open,
   setOpen,
   media,
 }: DrawerProps & {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  media: MediaInfo;
+  media: Media;
 }) {
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -79,7 +79,7 @@ export default function MediaInfoDrawer({
           <ListItemIcon children={<InsertPhoto />} />
           <ListItemText
             primary={"Name"}
-            secondary={media.fileName + "." + media.mimeType}
+            secondary={media.fileName + "." + media}
           />
         </ListItem>
       </List>

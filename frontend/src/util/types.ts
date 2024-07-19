@@ -30,25 +30,29 @@ export type JWTPayload = {
   email: string;
 };
 
-export type MediaInfo = {
+export type MediaTimelineMap = {
+  [month: string]: { [day: string]: Media[] };
+};
+
+export interface Media {
   id: string;
   src: string;
-  size: string;
-  width: number;
-  height: number;
-  mimeType: number;
   fileName: string;
-  caption?: string;
   uploadedAt: Date;
   favourite?: boolean;
   rows?: number;
   cols?: number;
   [key: string]: string | boolean | number | Date | undefined;
-};
+}
 
-export type MediaTimelineMap = {
-  [month: string]: { [day: string]: MediaInfo[] };
-};
+export interface MediaInfo extends Media {
+  size: number;
+  width: number;
+  height: number;
+  format: string;
+  caption?: string;
+  [key: string]: string | boolean | number | Date | undefined;
+}
 
 export interface SuccessResponse<T> {
   success: boolean;
