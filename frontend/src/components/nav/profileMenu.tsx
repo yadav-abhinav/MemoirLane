@@ -12,8 +12,8 @@ import {
   Button,
 } from "@mui/material";
 import { useState, MouseEvent, useContext } from "react";
-import { profileSettings } from "../util/constants";
-import { authContext } from "../util/context";
+import { profileSettings } from "../../util/constants";
+import { authContext } from "../../util/context";
 import { useNavigate } from "react-router-dom";
 import { Face, Login } from "@mui/icons-material";
 
@@ -66,7 +66,7 @@ export default function ProfileMenu(props: BoxProps) {
           fontWeight={500}
           color="text.primary"
           m="0.1rem 1rem 0 0.5rem"
-          children={`Hello ${user.email}!`}
+          children={`Hello ${user.name.split(" ")[0]}!`}
         />
       </IconButton>
       <Menu

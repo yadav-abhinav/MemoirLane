@@ -1,5 +1,5 @@
 import { Box, BoxProps, Switch, styled } from "@mui/material";
-import { themeContext } from "../util/context";
+import { themeContext } from "../../util/context";
 import { useContext } from "react";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({

@@ -6,7 +6,7 @@ import {
   styled,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { dashPanelMenuList } from "../util/constants";
+import { dashPanelMenuList } from "../../util/constants";
 
 const StyledPaper = styled(Paper)({
   position: "fixed",

@@ -96,10 +96,11 @@ export async function refreshAccessToken(
 ) {
   const refreshToken = req.cookies?.rtoken;
   try {
-    const { userId, email } = await verifyRefreshToken(refreshToken);
+    const { userId, email, name } = await verifyRefreshToken(refreshToken);
     const { accessToken } = generateAccessAndRefreshTokens({
       id: userId,
       email,
+      name,
     });
     constructSucessResponse(res, { accessToken });
   } catch (err) {

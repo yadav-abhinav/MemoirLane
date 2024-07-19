@@ -10,8 +10,8 @@ import {
   ListSubheader,
   styled,
 } from "@mui/material";
-import { dashPanelMenuList, profileSettings } from "../util/constants";
-import { darkTheme } from "../util/theme";
+import { dashPanelMenuList, profileSettings } from "../../util/constants";
+import { darkTheme } from "../../util/theme";
 import { Dispatch, SetStateAction } from "react";
 
 const StyledBox = styled(Box)({

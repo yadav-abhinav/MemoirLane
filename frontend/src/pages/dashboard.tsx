@@ -1,9 +1,9 @@
 import { Container, Paper, useTheme } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
-import DashPanel from "../components/dashpanel";
-import MediaContainer from "../components/mediaContainer";
+import DashPanel from "../components/dash/dashpanel";
+import MediaContainer from "../components/media/mediaContainer";
 import { useState } from "react";
-import BottomPanel from "../components/bottomDashpanel";
+import BottomPanel from "../components/dash/bottomDashpanel";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState(0);

@@ -9,14 +9,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (token?.length) return true;
     return false;
   });
-  const [user, setUser] = useState<JWTPayload>({ userId: "", email: "" });
+  const [user, setUser] = useState<JWTPayload>({
+    userId: "",
+    email: "",
+    name: "",
+  });
 
   useEffect(() => {
     const token =
       localStorage.getItem("token") ?? sessionStorage.getItem("token");
     if (token?.length) {
       try {
-        const userInfo = JSON.parse(atob(token.split(".")[1]));
+        const userInfo: JWTPayload = JSON.parse(atob(token.split(".")[1]));
         if (!userInfo.userId.length) throw new Error();
         setUser(userInfo);
       } catch (err) {

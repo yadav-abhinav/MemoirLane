@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import empty from "../assets/empty.png";
+import empty from "../../assets/empty.png";
 
 export default function Empty() {
   return (

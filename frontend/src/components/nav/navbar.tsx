@@ -15,9 +15,9 @@ import {
 import logo_black from "/logo-black.png";
 import logo_white from "/logo-white.png";
 import ThemeToggler from "./toggleTheme";
-import { authContext } from "../util/context";
+import { authContext } from "../../util/context";
 import ProfileMenu from "./profileMenu";
-import { navPages } from "../util/constants";
+import { navPages } from "../../util/constants";
 import NavMenu from "./navMenu";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({

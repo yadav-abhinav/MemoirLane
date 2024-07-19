@@ -21,7 +21,7 @@ const uploadToCloud = (
       .upload_stream(
         {
           public_id: uuidv4(),
-          folder: `${userId}/media`,
+          folder: `media/${userId}`,
         },
         (error, result) => {
           if (error) reject(error);
@@ -94,7 +94,7 @@ export async function uploadMediaLink(
 
     const uploadResponse = await v2.uploader.upload(src, {
       public_id: mediaId,
-      folder: `${req.userId}/media`,
+      folder: `media/${req.userId}`,
     });
 
     await saveMediaToUser(res, user, uploadResponse);
@@ -161,6 +161,12 @@ export async function deleteMedia(
     const id = req.params.id;
     if (!validate(id))
       new ApiError(StatusCodes.BAD_REQUEST, "Invaild media link");
+
+    const public_id = `media/${userId}/${id}`;
+    const response = await cloudinary.api.delete_resources([public_id]);
+
+    if (response["deleted"][public_id] != "deleted")
+      throw new ApiError(StatusCodes.NOT_FOUND, "Media not found");
 
     const media = await Media.findOneAndDelete({ id });
     if (!media) throw new ApiError(StatusCodes.NOT_FOUND, "Media not found");

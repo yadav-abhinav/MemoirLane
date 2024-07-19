@@ -16,8 +16,9 @@ export async function getUserMedia(
     const user = await User.findOne({ id: req.userId }).populate({
       path: "images",
       options: { skip, limit: 20 },
-      select: "id, src, fileName, favourite, uploadedAt",
+      select: { id: 1, src: 1, fileName: 1, favourite: 1, uploadedAt: 1 },
     });
+
     if (!user) {
       res.redirect("/logout");
       throw new ApiError(StatusCodes.NOT_FOUND, "User Not found");

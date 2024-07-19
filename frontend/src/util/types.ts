@@ -8,9 +8,14 @@ export type AuthContextType = {
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export type themeContextType = {
+export type ThemeContextType = {
   mode: PaletteMode;
   toggleColorMode: () => void;
+};
+
+export type MediaContextType = {
+  media: Media;
+  fetchImageData: () => Promise<void>;
 };
 
 export type Feature = {
@@ -28,6 +33,7 @@ export type ErrorResponse = {
 export type JWTPayload = {
   userId: string;
   email: string;
+  name: string;
 };
 
 export type MediaTimelineMap = {

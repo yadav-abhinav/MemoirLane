@@ -6,12 +6,12 @@ import {
   Skeleton,
   styled,
 } from "@mui/material";
-import { Media as MediaType } from "../util/types";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Star, StarBorder } from "@mui/icons-material";
 import MediaDialog from "./mediaDialog";
-import request from "../util/requestHandler";
+import request from "../../util/requestHandler";
 import { toast } from "react-toastify";
+import { mediaContext } from "../../util/context";
 
 const ImageOverlay = styled(Box)({
   position: "absolute",
@@ -34,19 +34,23 @@ const FavButton = styled(IconButton)({
   opacity: 0,
 });
 
-export default function Media({ media }: { media: MediaType }) {
+export default function MediaCard() {
+  const { media } = useContext(mediaContext);
   const [loading, setLoading] = useState<boolean>(true);
   const [starred, setStarred] = useState<boolean>(!!media.favourite);
   const [open, setOpen] = useState<boolean>(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const handleFavouriteClick = async () => {
     setStarred((prev) => !prev);
-    try {
-      await request.patch(`media/${media.id}/favourite`);
-    } catch {
-      toast.error("Error adding image to favourites!");
-    }
+    request
+      .patch(`media/${media.id}/favourite`)
+      .catch(() => toast.error("Error adding image to favourites!"));
   };
+
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoading(false);
+  }, [imgRef]);
 
   return (
     <>
@@ -78,24 +82,25 @@ export default function Media({ media }: { media: MediaType }) {
           <ImageOverlay />
           <img
             src={media.src}
-            hidden={loading}
+            height={loading ? 0 : "auto"}
             loading="lazy"
             style={{
               objectFit: "cover",
               width: "100%",
               height: "100%",
             }}
-            onLoad={() => setTimeout(() => setLoading(false), 1000)}
+            onLoad={() => setTimeout(() => setLoading(false), 2000)}
           />
         </CardActionArea>
       </Card>
-      <MediaDialog
-        open={open}
-        setOpen={setOpen}
-        favourite={starred}
-        setFavourite={handleFavouriteClick}
-        id={media.id}
-      />
+      {open && (
+        <MediaDialog
+          open={open}
+          setOpen={setOpen}
+          favourite={starred}
+          setFavourite={handleFavouriteClick}
+        />
+      )}
     </>
   );
 }

@@ -2,7 +2,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CssBaseline, useTheme } from "@mui/material";
 import SignUp from "./pages/signupPage";
-import Navbar from "./components/navbar";
+import Navbar from "./components/nav/navbar";
 import Landing from "./pages/landingPage";
 import Login from "./pages/loginPage";
 import AuthRoute from "./components/router/authRoute";

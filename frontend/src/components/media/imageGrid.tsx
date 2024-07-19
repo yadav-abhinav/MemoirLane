@@ -5,9 +5,11 @@ import {
   Theme,
   useMediaQuery,
 } from "@mui/material";
-import { IMAGE_BASE_WIDTH, imageGridDimensions } from "../util/constants";
-import { Media as MediaType } from "../util/types";
-import Media from "./media";
+import { IMAGE_BASE_WIDTH, imageGridDimensions } from "../../util/constants";
+import { Media as MediaType } from "../../util/types";
+import MediaCard from "./mediaCard";
+import { useContext } from "react";
+import { mediaContext } from "../../util/context";
 
 const GAP = 3;
 const getDimensions = (imageData: MediaType[]) => {
@@ -24,6 +26,7 @@ export default function ImageGrid({ imageData }: { imageData: MediaType[] }) {
   const matches = useMediaQuery((theme: Theme) =>
     theme.breakpoints.between("xs", "md")
   );
+  const { fetchImageData } = useContext(mediaContext);
 
   return (
     <Box sx={{ overflow: "auto" }}>
@@ -39,13 +42,17 @@ export default function ImageGrid({ imageData }: { imageData: MediaType[] }) {
           const imageWidth =
             imageCols * IMAGE_BASE_WIDTH + (imageCols - 1) * GAP;
           return (
-            <ImageListItem
+            <mediaContext.Provider
               key={i}
-              cols={imageCols}
-              rows={image.rows}
-              sx={{ width: imageWidth, overflow: "hidden" }}
-              children={<Media media={image} />}
-            />
+              value={{ fetchImageData, media: image }}
+            >
+              <ImageListItem
+                cols={imageCols}
+                rows={image.rows}
+                sx={{ width: imageWidth, overflow: "hidden" }}
+                children={<MediaCard />}
+              />
+            </mediaContext.Provider>
           );
         })}
       </ImageList>

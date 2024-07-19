@@ -1,6 +1,6 @@
 import { Box, Container, Link, Typography, useTheme } from "@mui/material";
-import wrongDark from "../assets/wrong-dark.png";
-import wrongLight from "../assets/wrong-light.png";
+import errorDark from "../../assets/error-dark.png";
+import errorLight from "../../assets/error-light.png";
 
 export default function LoadError() {
   const theme = useTheme();
@@ -22,7 +22,7 @@ export default function LoadError() {
         <img
           height={150}
           width={150}
-          src={theme.palette.mode == "light" ? wrongLight : wrongDark}
+          src={theme.palette.mode == "light" ? errorLight : errorDark}
           alt="error"
         />
         <Typography

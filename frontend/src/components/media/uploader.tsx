@@ -11,10 +11,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { toastOptions, uploadActions } from "../util/constants";
+import { toastOptions, uploadActions } from "../../util/constants";
 import { ChangeEvent, MouseEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import request from "../util/requestHandler";
+import request from "../../util/requestHandler";
 
 export default function Uploader({
   fetchImageData,
@@ -49,14 +49,15 @@ export default function Uploader({
     }
     const files = Array.from(event.target.files);
     const formData = new FormData();
-    files.forEach((file) => {
+    for (const file of files) {
       const ext = file.name.split(".").pop()?.toLowerCase();
       if (!ext || !["jpg", "png", "jpeg"].includes(ext)) {
         toast.error(`Invaild file format .${ext}`);
         return;
       }
       formData.append("media-upload", file);
-    });
+    }
+
     toast
       .promise(
         request.post("media/upload/local", formData),

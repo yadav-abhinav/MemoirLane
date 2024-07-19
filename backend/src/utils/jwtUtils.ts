@@ -5,9 +5,13 @@ import { StatusCodes } from "http-status-codes";
 import { UserSesion } from "../models/userSession.model";
 import ApiError from "./apiError";
 
-export function generateAccessAndRefreshTokens({ id, email }: Partial<IUser>) {
+export function generateAccessAndRefreshTokens({
+  id,
+  email,
+  name,
+}: Partial<IUser>) {
   const accessToken = jwt.sign(
-    { userId: id, email },
+    { userId: id, name, email },
     process.env["ACCESS_TOKEN_SECRET_KEY"]!,
     {
       expiresIn: "15m",
@@ -15,7 +19,7 @@ export function generateAccessAndRefreshTokens({ id, email }: Partial<IUser>) {
   );
 
   const refreshToken = jwt.sign(
-    { userId: id, email },
+    { userId: id, email, name },
     process.env["REFRESH_TOKEN_SECRET_KEY"]!
   );
 
@@ -27,7 +31,7 @@ export async function verifyRefreshToken(refreshToken: string) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, "Unauthorized");
   }
 
-  const { userId, email } = jwt.verify(
+  const { userId, email, name } = jwt.verify(
     refreshToken,
     process.env["REFRESH_TOKEN_SECRET_KEY"]!
   ) as CustomJWTPayload;
@@ -37,5 +41,5 @@ export async function verifyRefreshToken(refreshToken: string) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, "Unauthorized");
   }
 
-  return { userId, email };
+  return { userId, email, name };
 }

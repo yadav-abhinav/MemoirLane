@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useState, MouseEvent } from "react";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { navPages } from "../util/constants";
+import { navPages } from "../../util/constants";
 import ThemeToggler from "./toggleTheme";
 import { Link } from "react-router-dom";
 
