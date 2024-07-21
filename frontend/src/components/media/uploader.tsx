@@ -11,15 +11,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { toastOptions, uploadActions } from "../../util/constants";
 import { ChangeEvent, MouseEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { toastOptions, uploadActions } from "../../util/constants";
 import request from "../../util/requestHandler";
 
 export default function Uploader({
-  fetchImageData,
+  reloadData,
 }: {
-  fetchImageData: () => Promise<void>;
+  reloadData: () => Promise<void>;
 }) {
   const [speedDialOpen, openSpeedDial] = useState(false);
   const [dialogOpen, openDialog] = useState(false);
@@ -38,7 +38,7 @@ export default function Uploader({
     const src = formData.get("url");
     toast
       .promise(request.post("media/upload/url", { src }), ...toastOptions())
-      .then(() => fetchImageData());
+      .then(() => reloadData());
     openDialog(false);
   };
 
@@ -63,7 +63,7 @@ export default function Uploader({
         request.post("media/upload/local", formData),
         ...toastOptions(files.length)
       )
-      .then(() => fetchImageData())
+      .then(() => reloadData())
       .catch(() => {});
     event.target.value = "";
   };

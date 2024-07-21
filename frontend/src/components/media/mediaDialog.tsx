@@ -92,6 +92,7 @@ export default function MediaDialog({
       }
       case "details": {
         setDrawerOpen((prev) => !prev);
+        setAnchorEl(null);
         break;
       }
       case "favourite": {
@@ -100,6 +101,7 @@ export default function MediaDialog({
       }
       case "delete": {
         handleDelete();
+        setAnchorEl(null);
         break;
       }
     }
@@ -116,7 +118,16 @@ export default function MediaDialog({
       case "album": {
         break;
       }
+      case "details": {
+        setDrawerOpen((prev) => !prev);
+        break;
+      }
+      case "delete": {
+        handleDelete();
+        break;
+      }
     }
+    setAnchorEl(null);
   };
 
   return (

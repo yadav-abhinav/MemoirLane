@@ -42,9 +42,9 @@ export default function MediaCard() {
   const imgRef = useRef<HTMLImageElement>(null);
 
   const handleFavouriteClick = async () => {
-    setStarred((prev) => !prev);
     request
       .patch(`media/${media.id}/favourite`)
+      .then(() => setStarred((prev) => !prev))
       .catch(() => toast.error("Error adding image to favourites!"));
   };
 

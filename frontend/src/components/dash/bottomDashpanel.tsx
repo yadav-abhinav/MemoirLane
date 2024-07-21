@@ -5,7 +5,6 @@ import {
   Paper,
   styled,
 } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
 import { dashPanelMenuList } from "../../util/constants";
 
 const StyledPaper = styled(Paper)({
@@ -23,7 +22,7 @@ export default function BottomPanel({
   setSelected,
 }: BoxProps & {
   selected: number;
-  setSelected: Dispatch<SetStateAction<number>>;
+  setSelected: (id: number) => void;
 }) {
   return (
     <StyledPaper sx={{ display }} elevation={3}>
@@ -34,9 +33,7 @@ export default function BottomPanel({
           backgroundImage: "inherit",
           borderRadius: "inherit",
         }}
-        onChange={(event, newValue) => {
-          setSelected(newValue);
-        }}
+        onChange={(event, id) => setSelected(id)}
       >
         {dashPanelMenuList.map((item) => (
           <BottomNavigationAction

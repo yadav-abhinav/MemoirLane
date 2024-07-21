@@ -8,5 +8,6 @@ export default async function connect() {
     logger.verbose("Connected to database successfully!");
   } catch (err) {
     logger.error(err);
+    throw err;
   }
 }

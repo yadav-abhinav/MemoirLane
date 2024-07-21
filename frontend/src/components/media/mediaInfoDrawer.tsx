@@ -10,8 +10,10 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Theme,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import {
@@ -34,50 +36,54 @@ export default function MediaInfoDrawer({
   const [mediaInfo, setMediaInfo] = useState<MediaInfo>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setLoading(true);
-    request
-      .get<MediaInfo>(`media/${media.id}`)
-      .then((data) => {
-        const exp = data.size > 2 ** 20 ? 20 : 10;
-        data["unit"] = data.size > 2 ** 20 ? "MB" : "KB";
-        data.size = Math.round(data.size / 2 ** exp);
-        data.uploadedAt = new Date(data.uploadedAt);
-        setMediaInfo(data);
-        setLoading(false);
-      })
-      .catch(() => toast.error("Error loading Image!"));
-  }, [media]);
+  const match = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.between("xs", "md")
+  );
 
   // useEffect(() => {
   //   setLoading(true);
-  //   fetch(`https://picsum.photos/id/${media.id}/info`)
-  //     .then((res) => res.json())
+  //   request
+  //     .get<MediaInfo>(`media/${media.id}`)
   //     .then((data) => {
-  //       const randomDate = new Date();
-  //       randomDate.setDate(Math.floor(Math.random() * 7 + 1));
-  //       randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
-  //       data.uploadedAt = randomDate;
-  //       data.src = data.download_url;
-  //       data.fileName = "untitled";
-  //       data.format = "jpg";
-  //       data.size = 10000088;
   //       const exp = data.size > 2 ** 20 ? 20 : 10;
   //       data["unit"] = data.size > 2 ** 20 ? "MB" : "KB";
   //       data.size = Math.round(data.size / 2 ** exp);
+  //       data.uploadedAt = new Date(data.uploadedAt);
   //       setMediaInfo(data);
   //       setLoading(false);
   //     })
-  //     .catch(() => toast.error("Error loading image info!"))
-  //     .finally(() => {});
+  //     .catch(() => toast.error("Error loading Image info!"));
   // }, [media]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`https://picsum.photos/id/${media.id}/info`)
+      .then((res) => res.json())
+      .then((data) => {
+        const randomDate = new Date();
+        randomDate.setDate(Math.floor(Math.random() * 7 + 1));
+        randomDate.setMonth(Math.floor(Math.random() * 2 + 1));
+        data.uploadedAt = randomDate;
+        data.src = data.download_url;
+        data.fileName = "untitled";
+        data.format = "jpg";
+        data.size = 10000088;
+        const exp = data.size > 2 ** 20 ? 20 : 10;
+        data["unit"] = data.size > 2 ** 20 ? "MB" : "KB";
+        data.size = Math.round(data.size / 2 ** exp);
+        setMediaInfo(data);
+        setLoading(false);
+      })
+      .catch(() => toast.error("Error loading image info!"))
+      .finally(() => {});
+  }, [media]);
 
   return (
     <Drawer
-      anchor="right"
+      anchor={match ? "bottom" : "right"}
       open={open}
       onClose={() => setOpen(false)}
-      PaperProps={{ sx: { minWidth: "20rem" } }}
+      PaperProps={{ sx: { minWidth: "20rem", pb: "1rem" } }}
       sx={{ zIndex: (theme) => theme.zIndex.modal + 1 }}
     >
       <AppBar elevation={0} position="relative">

@@ -1,6 +1,6 @@
-import { Feature } from "./types";
 import * as Icon from "@mui/icons-material";
 import { Slide, ToastOptions, ToastPromiseParams } from "react-toastify";
+import { Feature } from "./types";
 
 export const profileSettings = [
   { title: "Profile", href: "/", Icon: Icon.Person4Outlined },
@@ -41,7 +41,7 @@ export const FeatureList: Feature[] = [
 
 export const dashPanelMenuList = [
   { title: "Photos", href: "/", Icon: Icon.PhotoOutlined },
-  { title: "Shared", href: "#", Icon: Icon.PeopleOutlined },
+  { title: "Shared", href: "/sharing", Icon: Icon.PeopleOutlined },
   { title: "Favourites", href: "/", Icon: Icon.FavoriteBorder },
   { title: "Albums", href: "#", Icon: Icon.CollectionsOutlined },
 ];
@@ -67,6 +67,25 @@ export const mediaOptions = (favourite: boolean) => [
   { id: "delete", title: "Delete", Icon: Icon.Delete },
   { id: "download", title: "Download", Icon: Icon.Download },
   { id: "album", title: "Add to Album", Icon: Icon.CollectionsOutlined },
+];
+
+export const sharingTableHeaders = [
+  "Shared Albums",
+  "",
+  "Owner",
+  "Last Activity",
+  "",
+];
+
+export const albumOptions = [
+  {
+    id: "leave",
+    title: "Leave album",
+  },
+  {
+    id: "delete",
+    title: "Delete album",
+  },
 ];
 
 export const toastOptions = (

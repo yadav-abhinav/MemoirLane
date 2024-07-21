@@ -1,24 +1,24 @@
-import { useContext } from "react";
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Container,
-  Button,
-  Divider,
-  useTheme,
   Box,
+  Button,
+  Container,
+  Divider,
+  IconButton,
   styled,
+  Toolbar,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { useContext } from "react";
+import { navPages } from "../../util/constants";
+import { authContext } from "../../util/context";
+import NavMenu from "./navMenu";
+import ProfileMenu from "./profileMenu";
+import ThemeToggler from "./toggleTheme";
 import logo_black from "/logo-black.png";
 import logo_white from "/logo-white.png";
-import ThemeToggler from "./toggleTheme";
-import { authContext } from "../../util/context";
-import ProfileMenu from "./profileMenu";
-import { navPages } from "../../util/constants";
-import NavMenu from "./navMenu";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -42,6 +42,7 @@ const LogoText = styled(Typography)(({ theme }) => ({
   fontFamily: "monospace",
   fontWeight: 700,
   letterSpacing: ".3rem",
+  lineHeight: 0,
   color: theme.palette.primary.main,
   textDecoration: "none",
 })) as typeof Typography;

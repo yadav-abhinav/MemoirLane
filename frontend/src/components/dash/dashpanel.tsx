@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { dashPanelMenuList, profileSettings } from "../../util/constants";
 import { darkTheme } from "../../util/theme";
-import { Dispatch, SetStateAction } from "react";
 
 const StyledBox = styled(Box)({
   backgroundColor: "rgb(38, 80, 115)",
@@ -31,7 +30,7 @@ export default function DashPanel({
   setSelected,
 }: BoxProps & {
   selected: number;
-  setSelected: Dispatch<SetStateAction<number>>;
+  setSelected: (id: number) => void;
 }) {
   return (
     <StyledBox display={display}>
