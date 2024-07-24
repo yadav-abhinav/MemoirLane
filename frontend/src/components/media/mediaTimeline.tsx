@@ -85,15 +85,18 @@ export default function MediaTimeline() {
               year: "numeric",
             });
             return (
-              <Box key={month}>
+              <Box
+                key={month}
+                pl={{ md: "3.5rem", xs: "1.5rem" }}
+                pr="1.5rem"
+                pb="3rem"
+              >
                 <Typography variant="h4" children={dateHeading} />
                 <Stack
                   direction={{ xs: "column", md: "row" }}
                   useFlexGap
                   flexWrap="wrap"
-                  pb="3rem"
-                  pr="1.5rem"
-                  sx={{ columnGap: { md: "3.6rem" } }}
+                  columnGap="3.6rem"
                 >
                   {Object.keys(imageData[month])
                     .sort((a, b) => parseInt(b) - parseInt(a))

@@ -67,7 +67,7 @@ export default function Navbar() {
           <Box
             sx={{ display: { md: "flex", xs: "none" }, alignItems: "center" }}
           >
-            <IconButton href="/">
+            <IconButton href="/" disableRipple>
               <img
                 src={theme.palette.mode === "light" ? logo_black : logo_white}
                 height="35px"
@@ -78,7 +78,6 @@ export default function Navbar() {
               component="a"
               fontSize="1.3rem"
               href="/"
-              hidden={!matches}
               children={"MEMOIRLANE"}
             />
           </Box>
@@ -89,7 +88,7 @@ export default function Navbar() {
           <Box
             sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}
           >
-            <IconButton href="/">
+            <IconButton href="/" disableRipple>
               <img
                 src={theme.palette.mode === "light" ? logo_black : logo_white}
                 style={{ height: "35px" }}

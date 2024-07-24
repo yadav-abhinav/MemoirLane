@@ -1,21 +1,21 @@
+import { Face, Login } from "@mui/icons-material";
 import {
   Avatar,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  useTheme,
   Box,
   BoxProps,
-  ListItemIcon,
-  styled,
   Button,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  styled,
+  Typography,
+  useTheme,
 } from "@mui/material";
-import { useState, MouseEvent, useContext } from "react";
+import { MouseEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { profileSettings } from "../../util/constants";
 import { authContext } from "../../util/context";
-import { useNavigate } from "react-router-dom";
-import { Face, Login } from "@mui/icons-material";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -63,7 +63,7 @@ export default function ProfileMenu(props: BoxProps) {
         <Typography
           display={{ md: "block", xs: "none" }}
           variant="overline"
-          fontWeight={500}
+          fontWeight={600}
           color="text.primary"
           m="0.1rem 1rem 0 0.5rem"
           children={`Hello ${user.name.split(" ")[0]}!`}

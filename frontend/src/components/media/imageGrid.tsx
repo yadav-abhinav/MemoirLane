@@ -5,11 +5,11 @@ import {
   Theme,
   useMediaQuery,
 } from "@mui/material";
+import { useContext } from "react";
 import { IMAGE_BASE_WIDTH, imageGridDimensions } from "../../util/constants";
+import { mediaContext } from "../../util/context";
 import { Media as MediaType } from "../../util/types";
 import MediaCard from "./mediaCard";
-import { useContext } from "react";
-import { mediaContext } from "../../util/context";
 
 const GAP = 3;
 const getDimensions = (imageData: MediaType[]) => {
@@ -23,9 +23,7 @@ const getDimensions = (imageData: MediaType[]) => {
 
 export default function ImageGrid({ imageData }: { imageData: MediaType[] }) {
   const maxCols = getDimensions(imageData);
-  const matches = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.between("xs", "md")
-  );
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
   const { fetchImageData } = useContext(mediaContext);
 
   return (

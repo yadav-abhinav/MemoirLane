@@ -1,5 +1,12 @@
 import { createTheme } from "@mui/material";
 
+const typography = {
+  fontFamily: `"Raleway", "Roboto", "Helvetica Neue", "Arial", sans-serif`,
+  fontWeightLight: 300,
+  fontWeightRegular: 500,
+  fontWeightMedium: 600,
+};
+
 export const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -7,6 +14,7 @@ export const lightTheme = createTheme({
       main: "#11999E",
     },
   },
+  typography,
 });
 
 export const darkTheme = createTheme({
@@ -16,6 +24,7 @@ export const darkTheme = createTheme({
       main: "#52D3D8",
     },
   },
+  typography,
 });
 
 lightTheme.typography.h1 = darkTheme.typography.h1 = {

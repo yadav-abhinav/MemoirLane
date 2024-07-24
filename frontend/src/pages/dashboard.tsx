@@ -30,7 +30,7 @@ export default function Dashboard() {
       maxWidth={false}
       disableGutters
       sx={{
-        height: "100%",
+        height: "100svh",
         p: { md: "6rem 6rem 2rem", xs: "5.75rem 1rem 2.5rem" },
         background: `radial-gradient(circle at 50%, transparent, transparent 50%, ${bgColor} 100%)`,
       }}

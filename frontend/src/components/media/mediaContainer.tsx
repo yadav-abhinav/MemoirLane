@@ -44,7 +44,6 @@ export default function MediaContainer({
   return (
     <>
       <StyledBox
-        pl={{ md: "3.5rem", xs: "1.5rem" }}
         position={{ md: "relative", xs: "static" }}
         sx={{ ...sx }}
       >

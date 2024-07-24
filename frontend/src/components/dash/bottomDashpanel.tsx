@@ -25,7 +25,7 @@ export default function BottomPanel({
   setSelected: (id: number) => void;
 }) {
   return (
-    <StyledPaper sx={{ display }} elevation={3}>
+    <StyledPaper sx={{ display, zIndex: 3 }} elevation={3}>
       <BottomNavigation
         showLabels
         value={selected}

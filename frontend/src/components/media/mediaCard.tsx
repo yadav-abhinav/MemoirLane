@@ -1,3 +1,4 @@
+import { Star, StarBorder } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -7,11 +8,10 @@ import {
   styled,
 } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Star, StarBorder } from "@mui/icons-material";
-import MediaDialog from "./mediaDialog";
-import request from "../../util/requestHandler";
 import { toast } from "react-toastify";
 import { mediaContext } from "../../util/context";
+import request from "../../util/requestHandler";
+import MediaDialog from "./mediaDialog";
 
 const ImageOverlay = styled(Box)({
   position: "absolute",

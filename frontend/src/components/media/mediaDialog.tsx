@@ -1,3 +1,4 @@
+import { Close, MoreHoriz } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -17,19 +18,18 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { toast } from "react-toastify";
-import { Close, MoreHoriz } from "@mui/icons-material";
 import {
   Dispatch,
-  SetStateAction,
   MouseEvent,
-  useState,
+  SetStateAction,
   useContext,
+  useState,
 } from "react";
+import { toast } from "react-toastify";
 import { mediaOptions, toastOptions } from "../../util/constants";
-import MediaInfoDrawer from "./mediaInfoDrawer";
-import request from "../../util/requestHandler";
 import { mediaContext } from "../../util/context";
+import request from "../../util/requestHandler";
+import MediaInfoDrawer from "./mediaInfoDrawer";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -55,9 +55,7 @@ export default function MediaDialog({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const menuOpen = Boolean(anchorEl);
-  const match = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.between("xs", "md")
-  );
+  const match = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
   const breakId = match ? 2 : 4;
 
   const handleDownload = async () => {

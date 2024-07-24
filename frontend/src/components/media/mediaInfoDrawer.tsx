@@ -1,3 +1,4 @@
+import { AspectRatio, Close, InsertPhoto, Today } from "@mui/icons-material";
 import {
   AppBar,
   CircularProgress,
@@ -15,7 +16,6 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { toast } from "react-toastify";
 import {
   Dispatch,
   SetStateAction,
@@ -23,10 +23,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { AspectRatio, Close, InsertPhoto, Today } from "@mui/icons-material";
-import request from "../../util/requestHandler";
-import { MediaInfo } from "../../util/types";
+import { toast } from "react-toastify";
 import { mediaContext } from "../../util/context";
+import { MediaInfo } from "../../util/types";
 
 export default function MediaInfoDrawer({
   open,
